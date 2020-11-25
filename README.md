@@ -1,7 +1,7 @@
 # Data Structures (CSC 232) Final Project - Bear Bank
 
-### Riley Grotenhuis
+### Group Members
 
-### Ashton Barnwell
-
-### Daleon Kingore
+- Riley Grotenhuis
+- Ashton Barnwell
+- Daleon Kingore
