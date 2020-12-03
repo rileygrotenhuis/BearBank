@@ -152,7 +152,8 @@ Account* BankUser::getAccount(string x) {
     if (accounts.search(x) == 1) {
          return accounts.get(x);
     } else {
-        exit(1);
+        Account a1("exit", "exit", 0, "exit");
+        return &a1;
     }
 }
 #endif

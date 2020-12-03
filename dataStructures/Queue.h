@@ -95,8 +95,7 @@ vector<T> Queue<T>::getAll() {
     vector<string> results;    // The vector that will be returned
     // If the Queue is empty, output that to the user
     if (isEmpty()) {
-        cout << "The Queue is empty!" << endl;
-        exit(1);
+        cout << "There is no transaction history" << endl;
     // Otherwise, get all of the Queue
     } else {
         // Create a new Node and set it to the front

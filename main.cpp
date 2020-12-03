@@ -17,6 +17,8 @@
 #include "dataStructures/Stack.h"
 #include "dataStructures/Queue.h"
 #include "dataStructures/LinkedList.h"
+#include "dataStructures/OfficialBST.h"
+#include "dataStructures/UserBST.h"
 #include "utilities/ceaserCypher.h"
 #include "utilities/stringToVector.h"
 #include "utilities/time.h"
