@@ -17,6 +17,17 @@ string timeAndDate() {
     return timeAndDate;
 }
 
+string removeWhiteSpace(string x) {
+    char lastChar;
+    for (int i = 0; i < x.length(); i++) {
+        if (x[i] == lastChar && x[i] == ' ') {
+            x = x.erase(i, 1);
+        }
+        lastChar = x[i];
+    }
+    return x;
+}
+
 string getTime() {
     /* Gets the time and date from the computer and put it into a vector, erases
     useless parts, turns the date into numbers and put into date vector.
@@ -28,9 +39,11 @@ string getTime() {
     int month, day, year;
 
     // gets the date and time information from computer
-    auto time = std::chrono::system_clock::now();
+    auto time = chrono::system_clock::now();
     std::time_t end_time = std::chrono::system_clock::to_time_t(time);
     timeAndDate = std::ctime(&end_time);
+
+    timeAndDate = removeWhiteSpace(timeAndDate);
 
     // puts that info into a vector using stringToVector
     vector <string> vectorTime = stringToVector(timeAndDate);

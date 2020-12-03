@@ -11,7 +11,7 @@ class BiTree
 private:
    struct TreeNode
    {
-      int value;
+      BankUser value;
       TreeNode *left;  // Pointer to left child node
       TreeNode *right; // Pointer to right child node
    };
@@ -19,8 +19,12 @@ private:
    TreeNode *root; // Pointer to the root node
 
    // Private member functions
-   bool search(TreeNode *&, int);
-   bool deleteNode(int, TreeNode *&);
+   bool searchUsername(TreeNode *&, string);
+   bool searchFirst(TreeNode *&, string);
+   bool searchLast(TreeNode *&, string);
+   bool searchAddress(TreeNode *&, string);
+   bool searchPhone(TreeNode *&, string);
+   bool deleteNode(BankUser, TreeNode *&);
    void displayInOrder(TreeNode *) const;
    void displayPreOrder(TreeNode *) const;
    void displayPostOrder(TreeNode *) const;
@@ -71,27 +75,27 @@ private:
       return true;
    }
 
-   TreeNode* createNode(int key) {
+   TreeNode* createNode(BankUser key) {
       /* Utility function that simply creates a node */
       TreeNode* node = new TreeNode(); 
       node->value = key;  
-      node->left = NULL;  
-      node->right = NULL;  
+      node->left = nullptr;  
+      node->right = nullptr;  
 
       return(node);  
    }
 
-   TreeNode* insert(TreeNode* node, int value) {
+   TreeNode* insert(TreeNode* node, BankUser value) {
       /* Recursively inserts a value into the BST using node as the root, then 
       returns the new root of the subtree */
 
       if (node == nullptr) // if it's the start to the BST
          return(createNode(value));
    
-      if (value < node->value) // if node needs to be inserted on the left
+      if (value.getUsername() < node->value.getUsername()) // if node needs to be inserted on the left
          node->left = insert(node->left, value);
 
-      else if (value > node->value) // if node needs to be inserted on the right
+      else if (value.getUsername() > node->value.getUsername()) // if node needs to be inserted on the right
          node->right = insert(node->right, value);
 
       else // can't be equal
@@ -102,21 +106,21 @@ private:
       int balance = isBalanced(node);
 
       // If rotating right
-      if (balance > 1 && value < node->left->value)
+      if (balance > 1 && value.getUsername() < node->left->value.getUsername())
          return rightRotation(node);
    
       // if rotating left
-      if (balance < -1 && value > node->right->value)
+      if (balance < -1 && value.getUsername() > node->right->value.getUsername())
          return leftRotation(node);
 
       // if you need a left then right rotation
-      if (balance > 1 && value > node->left->value) {
+      if (balance > 1 && value.getUsername() > node->left->value.getUsername()) {
          node->left = leftRotation(node->left);
          return rightRotation(node);
       }
 
       // if you need a right then left rotation
-      if (balance < -1 && value < node->right->value) {
+      if (balance < -1 && value.getUsername() < node->right->value.getUsername()) {
          node->right = rightRotation(node->right);
          return leftRotation(node);
       }
@@ -142,12 +146,11 @@ public:
    }
 
    // Binary tree operations
-   bool searchNode(int);
-   bool deleteN(int);
-   void remove(int);
+   bool deleteN(BankUser);
    int height(TreeNode*);
    int isBalanced(TreeNode*);
    void getLeafs(TreeNode*);
+   bool searchNode(string, bool, bool, bool, bool, bool);
    
    // Get Balance factor of node N  
    int getBalance(TreeNode *N)  
@@ -198,8 +201,29 @@ public:
       }
    }
 
-   void insertNode(int value) {
-      root = insert(root, value);
+   void insertNode(string value) {
+      vector <string> valueV;
+      valueV = stringToVector(value);
+      BankUser newUser;
+
+      if (valueV.size() == 6) {
+         newUser.setFirstName(valueV[0]);
+         newUser.setLastName(valueV[1]);
+         newUser.setPhoneNumber(valueV[2]);
+         newUser.setAddress(valueV[3]);
+         newUser.setUsername(valueV[4]);
+         newUser.setPassword(valueV[5]);
+      }
+      else {
+         newUser.setFirstName(valueV[0]);
+         newUser.setLastName(valueV[1]);
+         newUser.setPhoneNumber(valueV[2]);
+         newUser.setAddress(valueV[3]);
+         newUser.setUsername(valueV[4]);
+         newUser.setPassword(valueV[5]);
+         newUser.setLastLogin(valueV[6]);
+      }
+      root = insert(root, newUser);
    }
 };
 #endif
@@ -214,7 +238,7 @@ void BiTree::displayInOrder(TreeNode *nodePtr) const
    if (nodePtr)
    {
       displayInOrder(nodePtr->left);
-      cout << nodePtr->value << endl; //Left then right
+      cout << nodePtr->value.getUsername() << endl; //Left then right
       displayInOrder(nodePtr->right);
    }
 }
@@ -228,7 +252,7 @@ void BiTree::displayPreOrder(TreeNode *nodePtr) const
 {
    if (nodePtr)
    {
-        cout << nodePtr->value << endl; //Before left and right
+        cout << nodePtr->value.getUsername() << endl; //Before left and right
         displayPreOrder(nodePtr->left);
         displayPreOrder(nodePtr->right);
    }
@@ -245,36 +269,144 @@ void BiTree::displayPostOrder(TreeNode *nodePtr) const
    {
         displayPostOrder(nodePtr->left);
         displayPostOrder(nodePtr->right);
-        cout << nodePtr->value << endl; //After all subtrees
+        cout << nodePtr->value.getUsername() << endl; //After all subtrees
    }
 }
 
-bool BiTree::searchNode(int num){
-   /* takes the num and gives it to search along with the root. Returns a bool if successful. */
-    if(search(root, num)){
-        return true; //If search find the input
-    }
-    else{
-        return false; //No input found
-    }
+bool BiTree::searchNode(string input, bool username, bool first, bool last, bool address, bool phone){
+   /* takes the input and gives it to search along with the root. Returns a bool if successful. */
+   if (username) {
+      if (searchUsername(root, input)) {
+         return true; //If search find the input
+      }
+      else {
+         return false; //No input found
+      }
+   }
+
+   else if (first) {
+      if (searchFirst(root, input)) {
+         return true; //If search find the input
+      }
+      else {
+         return false; //No input found
+      }
+   }
+
+   else if (last) {
+      if (searchLast(root, input)) {
+         return true; //If search find the input
+      }
+      else {
+         return false; //No input found
+      }
+   }
+
+   else if (address) {
+      if (searchAddress(root, input)) {
+         return true; //If search find the input
+      }
+      else {
+         return false; //No input found
+      }
+   }
+
+   else {
+      if (searchPhone(root, input)) {
+         return true; //If search find the input
+      }
+      else {
+         return false; //No input found
+      }
+   }
 }
 
 //Used to search through the list
-bool BiTree::search(TreeNode *&nodePtr, int num){
-    if (nodePtr == nullptr){
-      return false; //If the root does not exist
-    }
-    else if(num == nodePtr -> value){
-        return true; //If the value is equal to the input return true
-    }
-    else if (num < nodePtr->value){
-      search(nodePtr->left, num); // Search the left branch
-    }
+bool BiTree::searchUsername(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
 
-    return search(nodePtr->right, num); // Search the right branch
+   if (nodePtr->value.getUsername() == input)
+      return true;
+
+   bool leftChild = searchUsername(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchUsername(nodePtr->right, input);
+
+   return rightChild;
 }
 
-bool BiTree::deleteN(int num) {
+//Used to search through the list
+bool BiTree::searchFirst(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getFirstName() == input)
+      return true;
+
+   bool leftChild = searchFirst(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchFirst(nodePtr->right, input);
+
+   return rightChild;
+}
+
+//Used to search through the list
+bool BiTree::searchLast(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getLastName() == input)
+      return true;
+
+   bool leftChild = searchLast(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchLast(nodePtr->right, input);
+
+   return rightChild;
+}
+
+//Used to search through the list
+bool BiTree::searchAddress(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getAddress() == input)
+      return true;
+
+   bool leftChild = searchAddress(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchAddress(nodePtr->right, input);
+
+   return rightChild;
+}
+
+//Used to search through the list
+bool BiTree::searchPhone(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getPhoneNumber() == input)
+      return true;
+
+   bool leftChild = searchPhone(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchPhone(nodePtr->right, input);
+
+   return rightChild;
+}
+
+bool BiTree::deleteN(BankUser num) {
    /* takes in the input as num and calls deleteNode. Gives deleteNode the num
    and the root. */
    if (deleteNode(num, root)){
@@ -284,7 +416,7 @@ bool BiTree::deleteN(int num) {
    return false;
 }
 
-bool BiTree::deleteNode(int num, TreeNode *& node) {
+bool BiTree::deleteNode(BankUser num, TreeNode *& node) {
    /* function to delete a given node with the matching num to value.
    This function checks whether the num is on the left or right side of the tree,
    or if num equals the node value. If it does, then it does operations based on if it
@@ -296,14 +428,14 @@ bool BiTree::deleteNode(int num, TreeNode *& node) {
    if (node == nullptr) // the node doesn't exist
       return false;
 
-   if (node->value > num) { // if num is smaller, then left
+   if (node->value.getUsername() > num.getUsername()) { // if num is smaller, then left
       if (node->left == nullptr) {
          return false;
       }
       deleteNode(num, node->left);
    }
 
-   else if (num > node->value) { // if num is bigger, then it's right
+   else if (num.getUsername() > node->value.getUsername()) { // if num is bigger, then it's right
       if (node->right == nullptr) {
          return false;
       }
