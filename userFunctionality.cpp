@@ -53,25 +53,44 @@ void userFunctionality(BankUser user) {
             string newUsername;
             cout << "Enter your new username: ";
             getline(cin, newUsername);
-            user.setUsername(newUsername);
+            // If the newUsername is exit, continue
+            if (newUsername == "exit") {
+                continue;
+            // Otherwise, change the current username
+            } else {
+                user.setUsername(newUsername);
+            }
         // If the menuChoice is 2, allow the User to change their current password
         } else if (menuChoice == "2") {
             string newPassword;
             cout << "Enter your new password: ";
             getline(cin, newPassword);
-            user.setPassword(newPassword);
+            // If the newPassword is exit, continue
+            if (newPassword == "exit") {
+                continue;
+            // Otherwise, change the current password
+            } else {
+                user.setPassword(newPassword);
+            }
         // If the menuChoice is 3, allow the User to view their Account details
         } else if (menuChoice == "3") {
             // Ask for the accountNumber of the Account the User would like to view
             string accountNumber;
             cout << "Enter account number: ";
             getline(cin, accountNumber);
-            // Grab that Account using the accountNumber
-            Account *tempAccount = user.getAccount(accountNumber);
-            if (tempAccount->getAID() == "exit") {
-                cout << "Account does not exist" << endl;
+            // If the accountNumber is exit, continue
+            if (accountNumber == "exit") {
+                continue;
+            // Otherwise, run the accountDetails function with the accountNumber given
             } else {
-                accountDetails(user, tempAccount);
+                // If the Account does not exist, output that to the User
+                if (user.searchAccount(accountNumber) == 0) {
+                    cout << "Account does not exist!" << endl;
+                // Otherwise, get the Account from the User and run the accountDetails function
+                } else {
+                    Account *tempAccount = user.getAccount(accountNumber);
+                    accountDetails(user, tempAccount);
+                }
             }
         // If the menuChoice is 4, exit that menu
         } else if (menuChoice == "4") {
@@ -90,6 +109,7 @@ void accountDetails(BankUser user, Account *account) {
         cout << "[1] View account details" << endl;
         cout << "[1] View account balance" << endl;
         cout << "[3] View transaction history" << endl;
+        cout << "[4] Exit" << endl;
 
         // Get the menuChoice from the User
         string menuChoice;
@@ -108,7 +128,7 @@ void accountDetails(BankUser user, Account *account) {
                 cout << history[i] << endl;
             }
         // If the menuChoice is 4, exit that menu
-        } else if (menuChoice == "exit") {
+        } else if (menuChoice == "4") {
             break;
         // Otherwise, have the User try again
         } else {

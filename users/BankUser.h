@@ -48,6 +48,7 @@ class BankUser {
         // Operations to add and get an Account from a User will go below this line!
         void addAccount(Account);
         Account* getAccount(string);
+        bool searchAccount(string);
 };
 
 /* CONSTRUCTORS */
@@ -149,11 +150,16 @@ void BankUser::addAccount(Account x) {
 
 /* GET ACCOUNT OPERATION */
 Account* BankUser::getAccount(string x) {
+    Account a1("exit", "exit", 0, "exit");
+    return &a1;
+}
+
+/* SEARCH ACCOUNT OPERATION */
+bool BankUser::searchAccount(string x) {
     if (accounts.search(x) == 1) {
-         return accounts.get(x);
+        return true;
     } else {
-        Account a1("exit", "exit", 0, "exit");
-        return &a1;
+        return false;
     }
 }
 #endif
