@@ -8,6 +8,15 @@ const string ADMIN_PASSWORD = "kingoreRocks420";
 // secret shut down code
 const string SHUT_IT_DOWN = "SHUTITDOWN";
 
+//CD Variables for Admin
+int termLength;
+float interestCD;
+float penaltyPercentage;
+//Custom Variables for Admin
+float customInterest;
+float monthlyFee;
+float serviceCharge;
+
 /* FUNCTION PROTOTYPES */
 void bankUserLogin(BiTree*);
 void bankUserFunctionality(BankUser*);
@@ -416,54 +425,6 @@ void accountDetails(Account *account) {
     }
 }
 
-/*
-void userLogin(string username) {
-    /* Basically finished I think, needs implementation of the corresponding functions
-    in the switch statement. Contains the code that asks for username and password from 
-    user, and displays the menu if successful. 
-    string userName, password, userAccountNum;
-    BankUser * temp = users.getUserNode(userName);
-    
-    // get username and password and test them
-    cout << "Please enter your account information, or type 'exit' to quit:\n"
-    << "Username - ";
-    cin >> userName;
-    cin.ignore(100, '\n');
-    
-    if (checkIfExit(userName))
-        return;
-
-    cout << "Password - ";
-    cin >> password;
-    cin.ignore(100, '\n');
-
-    if (checkIfExit(password))
-        return;
-
-    // check if userName and password is correct by looping through the BST of users (add later)
-    if (temp->getUsername() == userName && temp->getPassword() == password) {
-        cout << "\nSuccessful Login!\n\n";
-    }
-
-    else {
-        cout << "\nError! No User Login under specified information, please try again.\n\n";
-        userLogin(username);
-    }
-
-    /* 5 case menu (may be replaced with a functionif more than one 5 case menus is needed 
-    in the future) 
-    while (true) {
-        cout << "Please enter an account number: ";
-        cin >> userAccountNum;
-        /* if (test if userAccountNum exists here)
-            break;
-           else {
-               error message and keep looping
-           }
-        
-    }
-}*/
-
 void addNewUserLogin(BiTree *users) {
     /* Function to create a new User Login with inputed names, phoneNumber, address, username
     and password. */
@@ -603,10 +564,8 @@ void addNewUserLogin(BiTree *users) {
         }
 
         if (yesOrNo == "Y" || yesOrNo == "y") {
-            string userInfo = firstName + " " + lastName + " " + phoneNumber + " " + address + 
-                " " + username + " " + password; 
-            users->insertNode(userInfo);
-
+            BankUser newUser(firstName, lastName, phoneNumber, address, username, password);
+            users->insertNode2(newUser);
 
             cout << "You have successfully created a login at Bear Bank!\n"
             << "We are exited to work with you!\n\n";
@@ -710,7 +669,7 @@ void accessingSpecificAccount(BiTree *users, string username) {
             cout << "Cannot access a CD, if you wish to withdraw, close the account.\n\n";
         }
 
-        else if (temp->getAccount(accntNumInput)->getCFlag() == false) {
+        else if (temp->getAccount(accntNumInput)->getCFlag()) {
             cout << "Cannot access a closed account.\n\n";
         }
 
@@ -727,7 +686,7 @@ void accessingSpecificAccount(BiTree *users, string username) {
         choice = threeCaseMenu("1) Deposit", "2) Withdraw", "3) Go Back", 
         "Entering Deposit", "Entering Withdraw", "Exiting");
 
-        string password, depositAmmnt, withdrawAmmnt;
+        string depositAmmnt, withdrawAmmnt;
         double deposit, withdraw;
         
         if (choice == 1) {
@@ -786,7 +745,7 @@ void accessingSpecificAccount(BiTree *users, string username) {
 
 void createAccnt(BiTree *users, string username) {
     string password;
-    
+
     BankUser * temp = users->getUserNode(username);
     while (true) { // while statement to be utilized later
         cout << "Enter User password or type 'exit' to go back: ";
@@ -794,7 +753,7 @@ void createAccnt(BiTree *users, string username) {
         cin.ignore(100, '\n');
         if (checkIfExit(password))
             return;
-        else if (password == temp->getPassword())
+        else if (temp->getPassword() == password)
             break;
         else {
             cout << "\nIncorrect password. Retry or type 'exit' to go back.\n\n"
@@ -808,154 +767,159 @@ void createAccnt(BiTree *users, string username) {
     in the future) */
     string userInput;
     int intUserInput;
-    // do {
-    //     while (true) {
-    //         // menu
-    //         cout << "1) Checkings Account\n"
-    //         << "2) Savings Account\n"
-    //         << "3) CD Account\n"
-    //         << "4) Bear Bank Custom Account\n"
-    //         << "5) Exit\n";
+    do {
+        while (true) {
+            // menu
+            cout << "1) Checkings Account\n"
+            << "2) Savings Account\n"
+            << "3) CD Account\n"
+            << "4) Bear Bank Custom Account\n"
+            << "5) Exit\n";
 
-    //         try { // try to turn the string into an int (error handling)
-    //             cin >> userInput;
-    //             cin.ignore(100, '\n');
-    //             intUserInput = stoi(userInput);
-    //             break;
-    //         }
+            try { // try to turn the string into an int (error handling)
+                cin >> userInput;
+                cin.ignore(100, '\n');
+                intUserInput = stoi(userInput);
+                break;
+            }
 
-    //         catch (...) {
-    //             cout << "\n***********************************************"
-    //             << "\n* ERROR. Please Enter '1' '2' '3' '4' or '5'. *\n"
-    //             << "***********************************************\n\n";
-    //         }
-    //     }
+            catch (...) {
+                cout << "\n***********************************************"
+                << "\n* ERROR. Please Enter '1' '2' '3' '4' or '5'. *\n"
+                << "***********************************************\n\n";
+            }
+        }
 
-    //     // execute menu options
-    //     string initialBalanceS, accountNum;
-    //     float initialBalance;
+        // execute menu options
+        string initialBalanceS, accountNum;
+        float initialBalance;
 
-    //     switch(intUserInput) {
-    //         case 1:
-    //             {
-    //                 cout << "\nCreating Checking Account\n\n"
-    //                 << "- - - - - - - - - - - - - - - - - - - -\n\n";
-    //                 while (true) {
-    //                     cout << "What is you're initial balance?: ";
-    //                     cin >> initialBalanceS;
-    //                     cin.ignore(100, '\n');
-    //                     if (checkIfExit(initialBalanceS)) {
-    //                         cout << "Cancelling...\n\n";
-    //                         break;
-    //                     }
-    //                     else if (isNumber(initialBalanceS)) {
-    //                         initialBalance = stof(initialBalanceS);
-    //                         if (initialBalance > 0) {
-    //                             accountNum = to_string(newAccNum());
-    //                             Account tempA(temp->getUsername(), temp->getPassword(), 
-    //                                 initialBalance, accountNum);
-    //                             temp->addAccount(tempA);
-    //                             break;
-    //                         }
-    //                     }
-    //                         cout << "Please enter only a number greater than 0\n\n";
-    //                 }
-    //                 break;
-    //             }
-    //         case 2:
-    //             {
-    //                 cout << "\nCreating Savings Account\n\n"
-    //                 << "- - - - - - - - - - - - - - - - - - - -\n\n";
-    //                 while (true) {
-    //                     cout << "What is you're initial balance?: ";
-    //                     cin >> initialBalanceS;
-    //                     cin.ignore(100, '\n');
-    //                     if (checkIfExit(initialBalanceS)) {
-    //                         cout << "Cancelling...\n\n";
-    //                         break;
-    //                     }
-    //                     else if (isNumber(initialBalanceS)) {
-    //                         initialBalance = stof(initialBalanceS);
-    //                         if (initialBalance > 0) {
-    //                             BankUser * temp; // temporary for now
-    //                             accountNum = to_string(newAccNum());
-    //                             Account tempA(temp->getUsername(), temp->getPassword(), 
-    //                                 initialBalance, .05, accountNum);
-    //                             temp->addAccount(tempA);
-    //                             break;
-    //                         }
-    //                     }
-    //                         cout << "Please enter only a number greater than 0\n\n";
-    //                 }
-    //                 break;
-    //             }
-    //         case 3:
-    //             {
-    //                 cout << "\nCreating CD Account\n\n"
-    //                 << "- - - - - - - - - - - - - - - - - - - -\n\n";
-    //                 while (true) {
-    //                     cout << "What is you're initial balance?: ";
-    //                     cin >> initialBalanceS;
-    //                     cin.ignore(100, '\n');
-    //                     if (checkIfExit(initialBalanceS)) {
-    //                         cout << "Cancelling...\n\n";
-    //                         break;
-    //                     }
-    //                     else if (isNumber(initialBalanceS)) {
-    //                         initialBalance = stof(initialBalanceS);
-    //                         if (initialBalance > 0) {
-    //                             BankUser *temp; // temporary for now
-    //                             accountNum = to_string(newAccNum());
-    //                             Account tempA(temp->getUsername(), temp->getPassword(), 
-    //                                 initialBalance, .05, accountNum, "1232021");
-    //                             temp->addAccount(tempA);
-    //                             break;
-    //                         }
-    //                     }
-    //                         cout << "Please enter only a number greater than 0\n\n";
-    //                 }
-    //                 break;
-    //             }
-    //         case 4:
-    //             {
-    //                 cout << "\nCreating Bear Bank Custom Account\n\n"
-    //                 << "- - - - - - - - - - - - - - - - - - - -\n\n";
-    //                 while (true) {
-    //                     cout << "What is you're initial balance?: ";
-    //                     cin >> initialBalanceS;
-    //                     cin.ignore(100, '\n');
-    //                     if (checkIfExit(initialBalanceS)) {
-    //                         cout << "Cancelling...\n\n";
-    //                         break;
-    //                     }
-    //                     else if (isNumber(initialBalanceS)) {
-    //                         initialBalance = stof(initialBalanceS);
-    //                         if (initialBalance > 0) {
-    //                             BankUser * temp; // temporary for now
-    //                             accountNum = to_string(newAccNum());
-    //                             Account tempA(temp->getUsername(), temp->getPassword(), 
-    //                                 initialBalance, .05, accountNum, "1232021", true);
-    //                             temp->addAccount(tempA);
-    //                             break;
-    //                         }
-    //                     }
-    //                         cout << "Please enter only a number greater than 0\n\n";
-    //                 }
-    //                 break;
-    //             }
-    //         case 5:
-    //             {
-    //                 cout << "Exiting\n\n";
-    //                 return;
-    //             }
-    //         default:
-    //             {
-    //                 cout << "\n***********************************************"
-    //                 << "\n* Error. Please Enter '1' '2' '3' '4' or '5'. *\n"
-    //                 << "***********************************************\n\n";
-    //             }
-    //     }
-    // } while(intUserInput > 5 || intUserInput <= 0); // loops if out-of-range num entered
+        switch(intUserInput) {
+            case 1:
+                {
+                    cout << "\nCreating Checking Account\n\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                    while (true) {
+                        cout << "What is you're initial balance?: ";
+                        cin >> initialBalanceS;
+                        cin.ignore(100, '\n');
+                        if (checkIfExit(initialBalanceS)) {
+                            cout << "Cancelling...\n\n";
+                            break;
+                        }
+                        else if (isNumber(initialBalanceS)) {
+                            initialBalance = stof(initialBalanceS);
+                            if (initialBalance > 0) {
+                                accountNum = to_string(newAccNum());
+                                Account tempA(temp->getUsername(), password, 
+                                    initialBalance, accountNum);
+                                temp->addAccount(tempA);
+                                cout << "\nAccont has been created!"
+                                << "You're new account number is: C" << accountNum << endl;
+                                break;
+                            }
+                        }
+                            cout << "Please enter only a number greater than 0\n\n";
+                    }
+                    break;
+                }
+            case 2:
+                {
+                    cout << "\nCreating Savings Account\n\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                    while (true) {
+                        cout << "What is you're initial balance?: ";
+                        cin >> initialBalanceS;
+                        cin.ignore(100, '\n');
+                        if (checkIfExit(initialBalanceS)) {
+                            cout << "Cancelling...\n\n";
+                            break;
+                        }
+                        else if (isNumber(initialBalanceS)) {
+                            initialBalance = stof(initialBalanceS);
+                            if (initialBalance > 0) {
+                                accountNum = to_string(newAccNum());
+                                Account tempA(temp->getUsername(), temp->getPassword(), 
+                                    initialBalance, .05, accountNum);
+                                temp->addAccount(tempA);
+                                cout << "\nAccont has been created!"
+                                << "You're new account number is: C" << accountNum << endl;
+                                break;
+                            }
+                        }
+                            cout << "Please enter only a number greater than 0\n\n";
+                    }
+                    break;
+                }
+            case 3:
+                {
+                    cout << "\nCreating CD Account\n\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                    while (true) {
+                        cout << "What is you're initial balance?: ";
+                        cin >> initialBalanceS;
+                        cin.ignore(100, '\n');
+                        if (checkIfExit(initialBalanceS)) {
+                            cout << "Cancelling...\n\n";
+                            break;
+                        }
+                        else if (isNumber(initialBalanceS)) {
+                            initialBalance = stof(initialBalanceS);
+                            if (initialBalance > 0) {
+                                accountNum = to_string(newAccNum());
+                                Account tempA(temp->getUsername(), temp->getPassword(), 
+                                    initialBalance, .05, .05, accountNum, "1232021");
+                                temp->addAccount(tempA);
+                                cout << "\nAccont has been created!"
+                                << "You're new account number is: C" << accountNum << endl;
+                                break;
+                            }
+                        }
+                            cout << "Please enter only a number greater than 0\n\n";
+                    }
+                    break;
+                }
+            case 4:
+                {
+                    cout << "\nCreating Bear Bank Custom Account\n\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                    while (true) {
+                        cout << "What is you're initial balance?: ";
+                        cin >> initialBalanceS;
+                        cin.ignore(100, '\n');
+                        if (checkIfExit(initialBalanceS)) {
+                            cout << "Cancelling...\n\n";
+                            break;
+                        }
+                        else if (isNumber(initialBalanceS)) {
+                            initialBalance = stof(initialBalanceS);
+                            if (initialBalance > 0) {
+                                accountNum = to_string(newAccNum());
+                                Account tempA(temp->getUsername(), temp->getPassword(), 
+                                    initialBalance, .05, 5, 10, accountNum);
+                                temp->addAccount(tempA);
+                                cout << "\nAccont has been created!"
+                                << "You're new account number is: C" << accountNum << endl;
+                                break;
+                            }
+                        }
+                            cout << "Please enter only a number greater than 0\n\n";
+                    }
+                    break;
+                }
+            case 5:
+                {
+                    cout << "Exiting\n\n";
+                    return;
+                }
+            default:
+                {
+                    cout << "\n***********************************************"
+                    << "\n* Error. Please Enter '1' '2' '3' '4' or '5'. *\n"
+                    << "***********************************************\n\n";
+                }
+        }
+    } while(intUserInput > 5 || intUserInput <= 0); // loops if out-of-range num entered
 }
 
 void closeAccnt(BiTree *users, string username) {
@@ -984,9 +948,9 @@ void closeAccnt(BiTree *users, string username) {
         cout << "\n\nYou can choose where to send the money.\n"
         << "Are you sure you want to close this account?[y/n]: ";
 
+        while (true) {
         cin >> yesOrNo;
         cin.ignore(100, '\n');
-        while (true) {
             if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n") 
                 break;
             else
@@ -1000,7 +964,7 @@ void closeAccnt(BiTree *users, string username) {
         if (yesOrNo == "Y" || yesOrNo == "y") {
             string userChoice;
             float oldBalance = tempAccount->getBalance();
-            tempAccount->setCFlag(false);
+            tempAccount->setCFlag(true);
 
             cout << "Closing Account. Enter the account number to deposit, or type 'cash'"
             << " to get a cash withdraw.\n";
@@ -1061,6 +1025,9 @@ void officialLogin(BiTree *users) {
     displays the menu options. */
     string userName, password, inputUsername;
     int choice = 0;
+    BankUser * temp;
+    BankOfficial * tempOfficial;
+    Account * tempAccount;
     
     while (true) {
         // Recieve inputs for username and password and test them
@@ -1079,8 +1046,9 @@ void officialLogin(BiTree *users) {
         if (checkIfExit(password))
             return;
 
+        tempOfficial = officials.getOfficialNode(userName);
         if (officials.searchNode(userName)) {
-            if (officials.searchNodePassword(password)) {
+            if (tempOfficial->getPassword() == password) {
                 cout << "\nSuccessful Login!\n\n";
                 break;
             }
@@ -1129,7 +1097,8 @@ void officialLogin(BiTree *users) {
                     return;
 
                 if (users->searchNode2(inputUsername)) {
-                    if (users->searchNode3(password)) {
+                    temp = users->getUserNode(inputUsername);
+                    if (temp->getPassword() == password) {
                         cout << "\nSuccessful Login!\n\n";
                         break;
                     }
@@ -1142,6 +1111,7 @@ void officialLogin(BiTree *users) {
                     cout << "\nError! No User Login under specified information, please try again.\n\n";
                 }
             }
+            cout << inputUsername;
             // If successful, access the user
             accessingUserAccounts(users, inputUsername);
         }
@@ -1150,36 +1120,32 @@ void officialLogin(BiTree *users) {
         else if (choice == 3) {
             string input;
             while (true) {
-                // Retrive username and password and test them
-                cout << "Enter an account number, customer name, phone number, or 'exit' to go back: ";
+                cout << "Enter an account number, customer Last name, phone number, or 'exit' to go back: ";
                 cin >> input;
                 cin.ignore(100, '\n');
         
                 if (checkIfExit(input))
                     return;
 
-                BankUser * temp;
-                Account * tempAccount;
                 if (users->searchNode7(input)) { // if account number
+                    cout << "\n";
                     temp = users->getUserNodeWithAccnt(input);
                     tempAccount = temp->getAccount(input);
                     tempAccount->getAccInfo();
-                    delete temp;
-                    delete tempAccount;
                     break;
                 }
 
                 else if (users->searchNode4(input)) { // if phone number
                     temp = users->searchNodePhone(input);
                     temp->showAccounts();
-                    delete temp;
+                    cout << "\n";
                     break;
                 }
 
                 else if (users->searchNode6(input)) { // if last name
                     temp = users->searchNodeLast(input);
                     temp->showAccounts();
-                    delete temp;
+                    cout << "\n";
                     break;
                 }
 
@@ -1187,8 +1153,6 @@ void officialLogin(BiTree *users) {
                     cout << "\nError! Nothing found using that information, please try again.\n\n";
                 }
             }
-            // If successful, access the user
-            accessingUserAccounts(users, userName);
         }
     }
 }
@@ -1202,7 +1166,7 @@ void adminLogin() {
     << "Username - ";
     cin >> userName;
     cin.ignore(100, '\n');
-    
+
     if (checkIfExit(userName))
         return;
 
@@ -1214,7 +1178,140 @@ void adminLogin() {
         return;
 
     if (userName == ADMIN_USER_NAME && password == ADMIN_PASSWORD) {
-        cout << "\nSuccessful Login!\n\n";
+        int choice = 0;
+        while(choice != 4){
+            choice = fourCaseMenu("1) Access Official Login", "2) Modify Account Types", "3) Change User Password", "4) Exit",
+            "Accessing Officials", "Retrieving Bank Data", "Accessing Users", "Exiting...");
+
+            //Access Officials
+            if (choice == 1){
+
+            }
+
+            //Modify Account Data
+            if (choice == 2){
+                int choice2 = 0;
+                cout << "Which value would you like to modify" << endl;
+                while (choice2 != 3){
+                    choice2 = threeCaseMenu("1) CD Accounts", "2) Custom Accounts", "3) Exit",
+                    "Accessing Bank CD Account Data", "Accessing Bank Custom Account Data", "Exiting...");
+
+                    //CD Account Variables
+                    if (choice2 == 1){
+                        int choice3 = 0;
+                        while (choice3 != 4){
+                            choice3 = fourCaseMenu("1) Fixed Term", "2) Interest Rate for CD", "3) Penalty Percentage", "4) Exit",
+                            "Retrieving Data of Fixed Term", "Retrieving Data of CD Interest", "Retrieving Data of Penalty Percentage" , "Exiting...");
+
+                            if(choice3 == 1){ //Term Length (Years)
+                                while (true){
+                                    cout << "Current Term Length: " << termLength << " years.\n"
+                                    << "What would like the new length to be?" << endl;
+                                    string newLength;
+                                    cin >> newLength;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newLength)){
+                                        termLength = stoi(newLength);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive interger" << endl;
+                                }
+                            }
+                            else if (choice3 == 2){ //CD Interest
+                                while (true){
+                                    cout << "Current CD Interest: " << interestCD << ".\n"
+                                    << "What would like the new interest to be?\n"
+                                    << "ex) .5 = 50% and 5 = 500%" << endl;;
+                                    string newInt;
+                                    cin >> newInt;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newInt)){
+                                        interestCD = stof(newInt);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive rational number" << endl;
+                                }
+                            }
+
+                            else if (choice3 == 3){ //Penalty Percentage
+                                while (true){
+                                    cout << "Current Penalty Percentage: " << penaltyPercentage << ".\n"
+                                    << "What would like the new percentage to be?\n"
+                                    << "ex) .5 = 50% and 5 = 500%" << endl;;
+                                    string newPen;
+                                    cin >> newPen;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newPen)){
+                                        penaltyPercentage = stof(newPen);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive rational number" << endl;
+                                }
+                            }
+                        }
+                    }
+
+                    //Custom Account Variables
+                    else if (choice2 == 2){
+                        int choice3 = 0;
+                        while (choice3 != 4){
+                            choice3 = fourCaseMenu("1) Interest Rate for Custom", "2) Monthly Fee", "3) Service Charge", "4) Exit",
+                            "Retrieving Data of Custom Interest", "Retrieving Monthly Fee Data", "Retrieving Service Charge Data" , "Exiting...");
+
+                            if(choice3 == 1){ //Custom Interest
+                                while (true){
+                                    cout << "Current Custom Interest: " << customInterest << ".\n"
+                                    << "What would like the new interest to be?" << endl;
+                                    string newInt;
+                                    cin >> newInt;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newInt)){
+                                        customInterest = stof(newInt);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive rational number" << endl;
+                                }
+                            }
+
+                            else if (choice3 == 2){ //Monthly Fee
+                                while (true){
+                                    cout << "Current Monthly Fee: " << monthlyFee << ".\n"
+                                    << "What would like the new interest to be?" << endl;
+                                    string newMF;
+                                    cin >> newMF;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newMF)){
+                                        monthlyFee = stof(newMF);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive rational number" << endl;
+                                }
+                            }
+
+                            else if (choice3 == 3){ //Service Charge
+                                while (true){
+                                    cout << "Current Service Charge: " << serviceCharge << ".\n"
+                                    << "What would like the new interest to be?" << endl;
+                                    string newSC;
+                                    cin >> newSC;
+                                    cin.ignore(100, '\n');
+                                    if (isNumber(newSC)){
+                                        serviceCharge = stof(newSC);
+                                        break;
+                                    }
+                                    cout << "Please enter a valid positive rational number" << endl;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Change User Passwords
+            else if (choice == 3){
+
+            }
+        }
     }
 
     else {
@@ -1230,26 +1327,21 @@ Displays opening page to the user
 ************************************************************/
 
 void welcomeScreen(){
-
     BiTree users;
-
     /* Contains the starting menu options, and calls switch statment's corresponding functions */
     int choice;
     BankUser user1("Riley", "Grotenhuis", "8163928687", "1714 South Drumm Avenue", "rg1050", "123");
-   
+
     Account a1("123", "123", 100, "123");
     Account a2("456", "123", 200, "456");
     Account a3("789", "123", 300, "789");
-    
+
     user1.addAccount(a1);
     user1.addAccount(a2);
     user1.addAccount(a3);
 
     users.insertNode2(user1);
-    
-    // users.insertNode("Daelon Kingore (417)408-1486 1375 dk dk12");
-    // users.insertNode("Ashton Barnwell (555)555-555 address username password");
-    // users.insertNode("Bob Dylan (555)555-585 address username1 password");
+
     officials.insertNode("official oPassword");
     
     while (true) {
