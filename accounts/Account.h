@@ -41,6 +41,7 @@ class Account {
             password = pWord;
             balance = initBal;
             accountID = "C" + accID;
+            interestRate = 0;
             lastAccess = getTime();
             openDate = getTime();
         }
