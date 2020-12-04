@@ -6,15 +6,15 @@
 using namespace std;
 
 /* FUNCTION PROTOTYPES */
-void bankUserLogin(BiTree);
-void bankUserFunctionality(BankUser);
+void bankUserLogin(BiTree*);
+void bankUserFunctionality(BankUser*);
 void accountDetails(Account*);
 
+/* MAIN */
 int main() {
-
     // Creates the User Binary Search Tree
     BiTree userTree;
-    // Creates a dummy User
+    // Creates a dummy User 1
     BankUser user1("Riley", "Grotenhuis", "8163928687", "1714 South Drumm Avenue", "rg1050", "123");
     // Creates test accounts for the User
     Account a1("123", "123", 100, "123");
@@ -25,16 +25,55 @@ int main() {
     user1.addAccount(a2);
     user1.addAccount(a3);
 
-    // Test the BankUser functionality
-    bankUserFunctionality(user1);
+    // Insert the dummy user into the UserBST
+    userTree.insertNode2(user1);
 
+    // Test the BankUser functionality
+    bankUserLogin(&userTree);
+    
     return 0;
 }
 
-void bankUserFunctionality(BankUser user) {
+/* BANK USER LOGIN */
+void bankUserLogin(BiTree *userTree) {
+    for (;;) {
+        // Get the User's username
+        string username;
+        cout << "Username: ";
+        getline(cin, username);
+        // If the username is exit, break out of the loop
+        if (username == "exit") {
+            break;
+        }
+        string password;
+        cout << "Password: ";
+        getline(cin, password);
+        // If the password is exit, break out of the loop
+        if (password == "exit") {
+            break;
+        }
+
+        // Checks whether or not the username and password exist in the UserBST
+        bool status1 = userTree->searchNode2(username);
+        bool status2 = userTree->searchNode3(password);
+
+        // If the username and password exist, get that username and password's BankUser and run the next function
+        if (status1 == 1 && status2 == 1) {
+            cout << "success" << endl;
+            BankUser *temp = userTree->getUserNode(username);
+            bankUserFunctionality(temp);
+        // Otherwise, have the User try again
+        } else {
+            cout << "Username and/or password does not exist, try again!" << endl;
+        }
+    }
+}
+
+/* BANK USER FUNCTIONALITY */
+void bankUserFunctionality(BankUser *user) {
     // Output the User's last login, and update the last login as well
-    cout << "Last login: " << user.getLastLogin() << endl;
-    user.setLastLogin(timeAndDate());
+    cout << "Last login: " << user->getLastLogin() << endl;
+    user->setLastLogin(timeAndDate());
 
     for (;;) {
         // Display the menu
@@ -57,8 +96,8 @@ void bankUserFunctionality(BankUser user) {
                 continue;
             // Otherwise, set the User's username to the newUsername
             } else {
-                user.setUsername(newUsername);
-                cout << user.getUsername() << endl;
+                user->setUsername(newUsername);
+                cout << user->getUsername() << endl;
             }
         } else if (menuChoice == "2") {
             // Get the new password from the User
@@ -70,8 +109,8 @@ void bankUserFunctionality(BankUser user) {
                 continue;
             // Otherwise, set the User's password to the newPassword
             } else {
-                user.setPassword(newPassword);
-                cout << user.getPassword() << endl;
+                user->setPassword(newPassword);
+                cout << user->getPassword() << endl;
             }
         } else if (menuChoice == "3") {
             // Get the accountNumber from the User
@@ -79,8 +118,8 @@ void bankUserFunctionality(BankUser user) {
             cout << "Enter your account number: ";
             getline(cin, accountNumber);
             // If the accountNumber exists in the User's account list, run the accountDetails function
-            if (user.searchAccount(accountNumber) == 1) {
-                Account *temp = user.getAccount(accountNumber);
+            if (user->searchAccount(accountNumber) == 1) {
+                Account *temp = user->getAccount(accountNumber);
                 accountDetails(temp);
             // Otherwise, output an error message to the User
             } else {
@@ -94,6 +133,7 @@ void bankUserFunctionality(BankUser user) {
     }
 }
 
+/* ACCOUNT DETAILS */
 void accountDetails(Account *account) {
     for (;;) {
         // Display the menu to the User

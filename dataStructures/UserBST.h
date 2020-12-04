@@ -21,6 +21,7 @@ private:
 
    // Private member functions
    bool searchUsername(TreeNode *&, string);
+   bool searchPassword(TreeNode *&, string);
    bool searchFirst(TreeNode *&, string);
    bool searchLast(TreeNode *&, string);
    bool searchAddress(TreeNode *&, string);
@@ -153,6 +154,8 @@ public:
    int isBalanced(TreeNode*);
    void getLeafs(TreeNode*);
    bool searchNode(string, bool, bool, bool, bool, bool);
+   bool searchNode2(string);
+   bool searchNode3(string);
    BankUser* getUserNode(string);
    
    // Get Balance factor of node N  
@@ -227,6 +230,10 @@ public:
          newUser.setLastLogin(valueV[6]);
       }
       root = insert(root, newUser);
+   }
+
+   void insertNode2(BankUser user) {
+      root = insert(root, user);
    }
 };
 #endif
@@ -324,6 +331,22 @@ bool BiTree::searchNode(string input, bool username, bool first, bool last, bool
    }
 }
 
+bool BiTree::searchNode2(string input) {
+   if (searchUsername(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
+bool BiTree::searchNode3(string input) {
+   if (searchPassword(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
 //Used to search through the list
 bool BiTree::searchUsername(TreeNode *&nodePtr, string input){
    if (nodePtr == NULL)
@@ -337,6 +360,22 @@ bool BiTree::searchUsername(TreeNode *&nodePtr, string input){
       return true; 
 
    bool rightChild = searchUsername(nodePtr->right, input);
+
+   return rightChild;
+}
+
+bool BiTree::searchPassword(TreeNode *&nodePtr, string input) {
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getPassword() == input)
+      return true;
+
+   bool leftChild = searchPassword(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchPassword(nodePtr->right, input);
 
    return rightChild;
 }

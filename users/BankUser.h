@@ -24,7 +24,7 @@ class BankUser {
         // Linked List of Accounts this BankUser owns
         LinkedList accounts;
         // open or closed
-        bool flag = true;
+        bool flag;
     public:
         // Constructors
         BankUser();
@@ -65,14 +65,15 @@ BankUser::BankUser() {
     password = "";
 }
 
-BankUser::BankUser(string first, string last, string phone, string address, string username, string password) {
+BankUser::BankUser(string first, string last, string phone, string address, string u, string p) {
     firstName = first;
     lastName = last;
     phoneNumber = phone;
     address = address;
-    username = username;
-    password = password;
+    username = u;
+    password = p;
     lastLogin = timeAndDate();
+    flag = true;
 }
 
 /* SETTERS */
