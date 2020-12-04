@@ -26,12 +26,16 @@ private:
    bool searchLast(TreeNode *&, string);
    bool searchAddress(TreeNode *&, string);
    bool searchPhone(TreeNode *&, string);
+   bool searchAccnt(TreeNode *&, string);
    bool deleteNode(BankUser, TreeNode *&);
    void displayInOrder(TreeNode *) const;
    void displayPreOrder(TreeNode *) const;
    void displayPostOrder(TreeNode *) const;
    BankUser* getUser(TreeNode *, string);
-
+   BankUser* getUserWithAccnt(TreeNode *, string);
+   BankUser* searchPhoneGetUser(TreeNode *&, string);
+   BankUser* searchFirstGetUser(TreeNode *&, string);
+   BankUser* searchLastGetUser(TreeNode *&, string);
 
    TreeNode* findMinNode(TreeNode* node) {
       // finds the min value of the tree it's given
@@ -156,7 +160,15 @@ public:
    bool searchNode(string, bool, bool, bool, bool, bool);
    bool searchNode2(string);
    bool searchNode3(string);
+   bool searchNode4(string);
+   bool searchNode5(string);
+   bool searchNode6(string);
+   bool searchNode7(string);
+   BankUser* searchNodePhone(string);
+   BankUser* searchNodeFirst(string);
+   BankUser* searchNodeLast(string);
    BankUser* getUserNode(string);
+   BankUser* getUserNodeWithAccnt(string);
    
    // Get Balance factor of node N  
    int getBalance(TreeNode *N)  
@@ -347,6 +359,38 @@ bool BiTree::searchNode3(string input) {
    }
 }
 
+bool BiTree::searchNode4(string input) {
+   if (searchPhone(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
+bool BiTree::searchNode5(string input) {
+   if (searchFirst(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
+bool BiTree::searchNode6(string input) {
+   if (searchLast(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
+bool BiTree::searchNode7(string input) {
+   if (searchAccnt(root, input)) {
+      return true; //If search find the input
+   } else {
+      return false; //No input found
+   }
+}
+
 //Used to search through the list
 bool BiTree::searchUsername(TreeNode *&nodePtr, string input){
    if (nodePtr == NULL)
@@ -444,6 +488,71 @@ bool BiTree::searchPhone(TreeNode *&nodePtr, string input){
       return true; 
 
    bool rightChild = searchPhone(nodePtr->right, input);
+
+   return rightChild;
+}
+
+BankUser* BiTree::searchNodePhone(string phoneNum) {
+   return searchPhoneGetUser(root, phoneNum);
+}
+
+BankUser* BiTree::searchNodeFirst(string firstName) {
+   return searchFirstGetUser(root, firstName);
+}
+
+BankUser* BiTree::searchNodeLast(string lastName) {
+   return searchLastGetUser(root, lastName);
+}
+
+//Used to search through the list
+BankUser* BiTree::searchPhoneGetUser(TreeNode *&nodePtr, string input){
+   if (nodePtr->value.getPhoneNumber() == input)
+      return &nodePtr->value;
+
+   bool leftChild = searchPhone(nodePtr->left, input);
+   if(leftChild) 
+      return searchPhoneGetUser(nodePtr->left, input); 
+
+   return searchPhoneGetUser(nodePtr->right, input);
+}
+
+//Used to search through the list
+BankUser* BiTree::searchFirstGetUser(TreeNode *&nodePtr, string input){
+   if (nodePtr->value.getFirstName() == input)
+      return &nodePtr->value;
+
+   bool leftChild = searchPhone(nodePtr->left, input);
+   if(leftChild) 
+      return searchFirstGetUser(nodePtr->left, input); 
+
+   return searchFirstGetUser(nodePtr->right, input);
+}
+
+//Used to search through the list
+BankUser* BiTree::searchLastGetUser(TreeNode *&nodePtr, string input){
+   if (nodePtr->value.getLastName() == input)
+      return &nodePtr->value;
+
+   bool leftChild = searchPhone(nodePtr->left, input);
+   if(leftChild) 
+      return searchLastGetUser(nodePtr->left, input); 
+
+   return searchLastGetUser(nodePtr->right, input);
+}
+
+//Used to search through the list
+bool BiTree::searchAccnt(TreeNode *&nodePtr, string input){
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.searchAccount(input))
+      return true;
+
+   bool leftChild = searchAccnt(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchAccnt(nodePtr->right, input);
 
    return rightChild;
 }
@@ -562,8 +671,12 @@ void BiTree::getLeafs(TreeNode *nodePtr){
     }
 }
 
-BankUser* BiTree::getUserNode(string x) {
-   return getUser(root, x);
+BankUser* BiTree::getUserNode(string username) {
+   return getUser(root, username);
+}
+
+BankUser* BiTree::getUserNodeWithAccnt(string accntNum) {
+   return getUserWithAccnt(root, accntNum);
 }
 
 BankUser* BiTree::getUser(TreeNode *nodePtr, string input) {
@@ -576,6 +689,20 @@ BankUser* BiTree::getUser(TreeNode *nodePtr, string input) {
 
    else {
       getUser(nodePtr->right, input);
+   }
+   return &nodePtr->value;
+}
+
+BankUser* BiTree::getUserWithAccnt(TreeNode *nodePtr, string input) {
+   if (nodePtr->value.searchAccount(input))
+      return &nodePtr->value;
+
+   else if (searchAccnt(nodePtr->left, input)) {
+      getUserWithAccnt(nodePtr->left, input);
+   }
+
+   else { 
+      getUserWithAccnt(nodePtr->right, input);
    }
    return &nodePtr->value;
 }

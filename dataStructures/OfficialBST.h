@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "../users/BankOfficial.h"
 using namespace std;
 
 class OfficialTree
@@ -21,6 +20,7 @@ private:
 
    // Private member functions
    bool search(TreeNode *&, string);
+   bool searchPassword(TreeNode *&, string);
    bool deleteNode(BankOfficial, TreeNode *&);
    void displayInOrder(TreeNode *) const;
    void displayPreOrder(TreeNode *) const;
@@ -148,6 +148,7 @@ public:
    int isBalanced(TreeNode*);
    void getLeafs(TreeNode*);
    bool searchNode(string);
+   bool searchNodePassword(string);
    BankOfficial* getOfficialNode(string);
    
    // Get Balance factor of node N  
@@ -267,6 +268,16 @@ bool OfficialTree::searchNode(string input){
    }
 }
 
+bool OfficialTree::searchNodePassword(string input){
+   /* takes the input and gives it to search along with the root. Returns a bool if successful. */
+   if (searchPassword(root, input)) {
+      return true; //If search find the input
+   }
+   else {
+      return false; //No input found
+   }
+}
+
 //Used to search through the list
 bool OfficialTree::search(TreeNode *&nodePtr, string input){
    if (nodePtr == NULL)
@@ -280,6 +291,22 @@ bool OfficialTree::search(TreeNode *&nodePtr, string input){
       return true; 
 
    bool rightChild = search(nodePtr->right, input);
+
+   return rightChild;
+}
+
+bool OfficialTree::searchPassword(TreeNode *&nodePtr, string input) {
+   if (nodePtr == NULL)
+      return false;
+
+   if (nodePtr->value.getPassword() == input)
+      return true;
+
+   bool leftChild = searchPassword(nodePtr->left, input);
+   if(leftChild) 
+      return true; 
+
+   bool rightChild = searchPassword(nodePtr->right, input);
 
    return rightChild;
 }
@@ -398,8 +425,8 @@ void OfficialTree::getLeafs(TreeNode *nodePtr){
     }
 }
 
-BankOfficial* OfficialTree::getOfficialNode(string x) {
-   return getOfficial(root, x);
+BankOfficial* OfficialTree::getOfficialNode(string username) {
+   return getOfficial(root, username);
 }
 
 BankOfficial* OfficialTree::getOfficial(TreeNode *nodePtr, string input) {

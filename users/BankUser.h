@@ -53,6 +53,7 @@ class BankUser {
         void addAccount(Account);
         Account* getAccount(string);
         bool searchAccount(string);
+        void showAccounts();
 };
 
 /* CONSTRUCTORS */
@@ -165,4 +166,10 @@ bool BankUser::searchAccount(string x) {
         return false;
     }
 }
+
+void BankUser::showAccounts() {
+    accounts.display();
+}
+
+
 #endif
