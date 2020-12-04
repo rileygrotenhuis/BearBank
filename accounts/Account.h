@@ -17,15 +17,18 @@ class Account {
         string closeDate;
         float balance;
         float interestRate;
-        float accumInt;
-        bool closeFlag;
+        float pPercent = 0;
+        float accumInt = 0;
+        float mFee = 0;
+        float pFee = 0;
+        bool closeFlag = false;
         Queue<string> transactionHistory;
 
     public:
 
         /* This is a deafult constructor. This is practically usless and is only helpful in the LinkedList.h file */
         Account() {
-            
+
         };
 
         /*  ----------------------------------------------------------
@@ -64,6 +67,7 @@ class Account {
             password = pWord;
             balance = initBal;
             interestRate = intRate;
+            closeFlag = false;
             accountID = "S" + accID;
             lastAccess = getTime();
             openDate = getTime();
@@ -89,10 +93,12 @@ class Account {
             ---------------------------------------------------------- */
 
         //Constructor for New CD Account
-        Account(string uid, string pWord, float initBal, float intRate, string accID, string cDate) {
+        Account(string uid, string pWord, float initBal, float intRate, float penaltyPercent, string accID, string cDate) {
             uniqueID = uid;
             password = pWord;
             balance = initBal;
+            closeFlag = false;
+            pPercent = penaltyPercent;
             interestRate = intRate;
             accountID = "CD" + accID;
             lastAccess = getTime();
@@ -100,12 +106,13 @@ class Account {
         }
 
         //Constructor for Exiting CD Account
-        Account(string uid, string pWord, float initBal, float intRate, float aInt, string accID, string cDate, string oDate, string lastAcc, bool cFlag) {
+        Account(string uid, string pWord, float initBal, float intRate, float aInt, float penaltyPercent, string accID, string cDate, string oDate, string lastAcc, bool cFlag) {
             accumInt = aInt;
             uniqueID = uid;
             password = pWord;
             balance = initBal;
             interestRate = intRate;
+            pPercent = penaltyPercent;
             closeFlag = cFlag;
             accountID = "CD" + accID;
             string newAccess = getTime();
@@ -120,30 +127,35 @@ class Account {
             ---------------------------------------------------------- */
 
         //Constructor for New BBC Account
-        Account(string uid, string pWord, float initBal, float intRate, string accID, string cDate, bool customFlag) {
+        Account(string uid, string pWord, float initBal, float intRate, float monthlyFee, float penaltyFee, string accID) {
             uniqueID = uid;
             password = pWord;
             balance = initBal;
             interestRate = intRate;
+            closeFlag = false;
             accountID = "BBC" + accID;
+            mFee = monthlyFee;
+            pFee = penaltyFee;
             lastAccess = getTime();
             openDate = getTime();
         }
 
         //Constructor for Existing BBC Account
-        Account(string uid, string pWord, float initBal, float intRate, float aInt, string accID, string cDate, bool customFlag, string oDate, string lastAcc, bool cFlag) {
+        Account(string uid, string pWord, float initBal, float intRate, float aInt, float monthlyFee, float penaltyFee, string accID, string oDate, string lastAcc, bool cFlag) {
             accumInt = aInt;
             uniqueID = uid;
             password = pWord;
             balance = initBal;
             interestRate = intRate;
             closeFlag = cFlag;
+            mFee = monthlyFee;
+            pFee = penaltyFee;
             accountID = "BBC" + accID;
             string newAccess = getTime();
             accumInt += calcInt(lastAcc, newAccess);
+            calcMonthFee(lastAcc, newAccess);
             lastAccess = getTime();
             openDate = oDate;
-            closeDate = cDate;
         }
 
         /*  ----------------------------------------------------------
@@ -185,8 +197,6 @@ class Account {
         void setAccInt(float value){
             accumInt = value;
         }
-
-
 
         void getAccInfo(){
             //test.append("Open Date: " + getOD() + "\n");
@@ -282,6 +292,10 @@ class Account {
             //If the password is correct
             if (input == password){
                 balance -= withdrawAmnt;
+                if (pFee > 0){
+                    cout << "Notice!!! $" << pFee << " Service fee to account due to withdraw.\n\n";
+                    balance -= pFee;
+                }
                 cout << "Password Success!\n"
                 << "Depositing: $" << withdrawAmnt << "\n"
                 << "Total Balance is now $" << balance << "\n"
@@ -297,7 +311,7 @@ class Account {
         }
 
         /*  ----------------------------------------------------------
-                    Calculate Interest Over Given Time
+                Calculate Interest or Monthly Fee Over Given Time
             ---------------------------------------------------------- */
 
         //This function takes both last access and current access and determines the amount of interest gained over said time.
@@ -305,130 +319,28 @@ class Account {
             vector <string> prevDate = parseDate(prevAcc);
             vector <string> newDate = stringToVector(newAcc);
 
-            int difDays;
-
-            //If account is closed no interest will be calculated
-            if(!closeFlag){
-                //Leap year
-                if (stoi(prevDate[1]) % 4 == 0 && stoi(prevDate[1]) % 100 != 0) {
-                    if(stoi(prevDate[0]) > stoi(newDate[0])){
-                        difDays = (366 - stoi(prevDate[0])) + stoi(newDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-
-                    else{
-                        difDays = stoi(newDate[0]) - stoi(prevDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-                }
-
-                //Leap year
-                else if (stoi(prevDate[1]) % 4 == 0 && stoi(prevDate[1]) % 100 == 0 && stoi(prevDate[1]) % 400 == 0) {
-                    if(stoi(prevDate[0]) > stoi(newDate[0])){
-                        difDays = (366 - stoi(prevDate[0])) + stoi(newDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-
-                    else{
-                        difDays = stoi(newDate[0]) - stoi(prevDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-                }
-
-                //Not a leap year
-                else {
-                    if(stoi(prevDate[0]) > stoi(newDate[0])){
-                        difDays = (365 - stoi(prevDate[0])) + stoi(newDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-
-                    else{
-                        difDays = stoi(newDate[0]) - stoi(prevDate[0]);
-
-                        for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
-                            if (i % 4 == 0 && i % 100 != 0) {
-                                difDays += 366;
-                            }
-
-                            else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
-                                difDays += 366;
-                            }
-
-                            else {
-                                difDays += 365;
-                            }
-                        }
-                    }
-                }
-
+            int difDays = daysPast(prevDate, newDate);
+            if (!closeFlag){
                 return (balance * (interestRate * difDays));
             }
             return 0;
+        }
+
+        void calcMonthFee(string prevAcc, string newAcc){
+            vector <string> prevDate = parseDate(prevAcc);
+            vector <string> nowDate = stringToVector(newAcc);
+            vector <string> difDate;
+
+            int prevMonth = monthsPast(prevDate);
+            int difDays = daysPast(prevDate, nowDate);
+            int totalMonths = difDays + stoi(prevDate[0]);
+            difDate.push_back(to_string(totalMonths));
+            difDate.push_back(prevDate[1]);
+            int difMonths = monthsPast(difDate);
+            int totalDif = difMonths - prevMonth;
+            for (int i = 0; i < totalDif; i++){
+                balance -= mFee;
+            }
         }
 
         /*  ----------------------------------------------------------
@@ -469,6 +381,20 @@ class Account {
 
             cout << "Account closed excess interest of amount: " << exInt << " has been removed from the account." << endl;
         }
+
+        void forceClose(){
+            accumInt = 0;
+            string nowTime = getTime();
+            vector <string> nowDate = stringToVector(nowTime);
+            vector <string> cDate = parseDate(closeDate);
+
+            int daysLeft = daysPast(nowDate, cDate);
+            balance -= (balance * (pPercent * daysLeft));
+        }
+
+        /*  ----------------------------------------------------------
+                    Functions used for Transaction History
+            ---------------------------------------------------------- */
 
     /* This function gets all of the transaction history and returns it all in a vector of strings */
     vector<string> getTransactionHistory() {
