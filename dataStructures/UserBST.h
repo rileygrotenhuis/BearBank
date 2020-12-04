@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "../users/BankUser.h"
 using namespace std;
 
 class BiTree
@@ -28,6 +29,7 @@ private:
    void displayInOrder(TreeNode *) const;
    void displayPreOrder(TreeNode *) const;
    void displayPostOrder(TreeNode *) const;
+   BankUser* getUser(TreeNode *, string);
 
 
    TreeNode* findMinNode(TreeNode* node) {
@@ -151,6 +153,7 @@ public:
    int isBalanced(TreeNode*);
    void getLeafs(TreeNode*);
    bool searchNode(string, bool, bool, bool, bool, bool);
+   BankUser* getUserNode(string);
    
    // Get Balance factor of node N  
    int getBalance(TreeNode *N)  
@@ -518,4 +521,22 @@ void BiTree::getLeafs(TreeNode *nodePtr){
         getLeafs(nodePtr->right);
         getLeafs(nodePtr->left);
     }
+}
+
+BankUser* BiTree::getUserNode(string x) {
+   return getUser(root, x);
+}
+
+BankUser* BiTree::getUser(TreeNode *nodePtr, string input) {
+   if (nodePtr->value.getUsername() == input)
+      return &nodePtr->value;
+
+   else if (input <= nodePtr->left->value.getUsername()) {
+      getUser(nodePtr->left, input);
+   }
+
+   else {
+      getUser(nodePtr->right, input);
+   }
+   return &nodePtr->value;
 }

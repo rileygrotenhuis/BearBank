@@ -113,4 +113,273 @@ vector <string> parseDate(string date){
     }
     return vecDate;
 }
+
+bool isLeapYear(int year){
+    if (year % 4 == 0 && year % 100 != 0) {
+       return true;
+    }
+
+    else if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0) {
+        return true;
+    }
+
+    else {
+        return false;
+    }
+}
+
+int monthsPast(vector <string> prevDate){
+            int year = stoi(prevDate[1]);
+            int day = stoi(prevDate[0]);
+            bool leapYear = isLeapYear(year);
+            int yPast = 0;
+            while(true){
+
+                //Jan
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //Feb
+                if(leapYear){
+                    if((day - 29) <= 0){
+                        return yPast;
+                    }
+                    else{
+                        yPast++;
+                        day -= 29;
+                    }
+                }
+                else{
+                    if((day - 28) <= 0){
+                        return yPast;
+                    }
+                    else{
+                        yPast++;
+                        day -= 28;
+                    }
+                }
+
+                //Mar
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //Apr
+                if((day - 30) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 30;
+                }
+
+                //May
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //June
+                if((day - 30) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 30;
+                }
+
+                //July
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //Aug
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //Sep
+                if((day - 30) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 30;
+                }
+
+                //Oct
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+
+                //Nov
+                if((day - 30) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 30;
+                }
+
+                //Dec
+                if((day - 31) <= 0){
+                    return yPast;
+                }
+                else{
+                    yPast++;
+                    day -= 31;
+                }
+            }
+
+            leapYear = isLeapYear(year+1);
+
+        }
+
+int daysPast(vector <string> prevDate, vector <string> newDate){
+        int difDays;
+
+        //If account is closed no interest will be calculated
+        //Leap year
+        if (stoi(prevDate[1]) % 4 == 0 && stoi(prevDate[1]) % 100 != 0) {
+            if(stoi(prevDate[0]) > stoi(newDate[0])){
+                difDays = (366 - stoi(prevDate[0])) + stoi(newDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+
+            else{
+                difDays = stoi(newDate[0]) - stoi(prevDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+        }
+
+        //Leap year
+        else if (stoi(prevDate[1]) % 4 == 0 && stoi(prevDate[1]) % 100 == 0 && stoi(prevDate[1]) % 400 == 0) {
+            if(stoi(prevDate[0]) > stoi(newDate[0])){
+                difDays = (366 - stoi(prevDate[0])) + stoi(newDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+
+            else{
+                difDays = stoi(newDate[0]) - stoi(prevDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+        }
+
+        //Not a leap year
+        else {
+            if(stoi(prevDate[0]) > stoi(newDate[0])){
+                difDays = (365 - stoi(prevDate[0])) + stoi(newDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < (stoi(newDate[1])-1); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+
+            else{
+                difDays = stoi(newDate[0]) - stoi(prevDate[0]);
+
+                for (int i = stoi(prevDate[1]); i < stoi(newDate[1]); i++){
+                    if (i % 4 == 0 && i % 100 != 0) {
+                        difDays += 366;
+                    }
+
+                    else if (i % 4 == 0 && i % 100 == 0 && i % 400 == 0) {
+                        difDays += 366;
+                    }
+
+                    else {
+                        difDays += 365;
+                    }
+                }
+            }
+        }
+        return difDays;
+    }
+
 #endif

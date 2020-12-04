@@ -6,6 +6,7 @@
 #include "../dataStructures/Stack.h"
 #include "../dataStructures/LinkedList.h"
 #include "../accounts/Account.h"
+#include "../utilities/time.h"
 using namespace std;
 
 /* BANK USER DEFINITION */
@@ -22,11 +23,12 @@ class BankUser {
         string lastLogin;
         // Linked List of Accounts this BankUser owns
         LinkedList accounts;
+        // open or closed
+        bool flag = true;
     public:
         // Constructors
         BankUser();
         BankUser(string, string, string, string, string, string);
-        BankUser(string, string, string, string, string, string, string);
         // Setters
         void setFirstName(string);
         void setLastName(string);
@@ -35,6 +37,7 @@ class BankUser {
         void setUsername(string);
         void setPassword(string);
         void setLastLogin(string);
+        void setFlag(bool);
         // Getters
         string getFirstName();
         string getLastName();
@@ -43,6 +46,7 @@ class BankUser {
         string getUsername();
         string getPassword();
         string getLastLogin();
+        bool getFlag();
         // Bank User Operations
         string getInformation();
         // Operations to add and get an Account from a User will go below this line!
@@ -68,16 +72,7 @@ BankUser::BankUser(string first, string last, string phone, string address, stri
     address = address;
     username = username;
     password = password;
-}
-
-BankUser::BankUser(string first, string last, string phone, string address, string username, string password, string lastLogin) {
-    firstName = first;
-    lastName = last;
-    phoneNumber = phone;
-    address = address;
-    username = username;
-    password = password;
-    lastLogin = lastLogin;
+    lastLogin = timeAndDate();
 }
 
 /* SETTERS */
@@ -107,6 +102,10 @@ void BankUser::setPassword(string x) {
 
 void BankUser::setLastLogin(string x) {
     lastLogin = x;
+}
+
+void BankUser::setFlag(bool x) {
+    flag = x;
 }
 
 /* GETTERS */
@@ -143,6 +142,10 @@ string BankUser::getInformation() {
     return firstName + " " + lastName + ", " + phoneNumber + ", " + address;
 }
 
+bool BankUser::getFlag() {
+    return flag;
+}
+
 /* ADD ACCOUNT OPERATION */
 void BankUser::addAccount(Account x) {
     accounts.append(x);
@@ -150,11 +153,10 @@ void BankUser::addAccount(Account x) {
 
 /* GET ACCOUNT OPERATION */
 Account* BankUser::getAccount(string x) {
-    Account a1("exit", "exit", 0, "exit");
-    return &a1;
+    return accounts.get(x);
 }
 
-/* SEARCH ACCOUNT OPERATION */
+/* SEARCH FUNCTION */
 bool BankUser::searchAccount(string x) {
     if (accounts.search(x) == 1) {
         return true;
