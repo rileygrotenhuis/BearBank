@@ -680,29 +680,31 @@ BankUser* BiTree::getUserNodeWithAccnt(string accntNum) {
 }
 
 BankUser* BiTree::getUser(TreeNode *nodePtr, string input) {
+   BankUser * user;
    if (nodePtr->value.getUsername() == input)
       return &nodePtr->value;
 
    else if (input <= nodePtr->left->value.getUsername()) {
-      getUser(nodePtr->left, input);
+      user = getUser(nodePtr->left, input);
    }
 
    else {
-      getUser(nodePtr->right, input);
+      user = getUser(nodePtr->right, input);
    }
-   return &nodePtr->value;
+   return user;
 }
 
 BankUser* BiTree::getUserWithAccnt(TreeNode *nodePtr, string input) {
+   BankUser * user;
    if (nodePtr->value.searchAccount(input))
       return &nodePtr->value;
 
    else if (searchAccnt(nodePtr->left, input)) {
-      getUserWithAccnt(nodePtr->left, input);
+      user = getUserWithAccnt(nodePtr->left, input);
    }
 
    else { 
-      getUserWithAccnt(nodePtr->right, input);
+      user = getUserWithAccnt(nodePtr->right, input);
    }
-   return &nodePtr->value;
+   return user;
 }

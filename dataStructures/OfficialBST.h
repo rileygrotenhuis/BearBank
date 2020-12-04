@@ -430,15 +430,16 @@ BankOfficial* OfficialTree::getOfficialNode(string username) {
 }
 
 BankOfficial* OfficialTree::getOfficial(TreeNode *nodePtr, string input) {
+   BankOfficial * official;
    if (nodePtr->value.getUsername() == input)
       return &nodePtr->value;
 
    else if (input <= nodePtr->left->value.getUsername()) {
-      getOfficial(nodePtr->left, input);
+      official = getOfficial(nodePtr->left, input);
    }
 
    else {
-      getOfficial(nodePtr->right, input);
+      official = getOfficial(nodePtr->right, input);
    }
-   return &nodePtr->value;
+   return official;
 }
