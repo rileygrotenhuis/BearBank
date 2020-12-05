@@ -54,6 +54,7 @@ class BankUser {
         Account* getAccount(string);
         bool searchAccount(string);
         void showAccounts();
+        void changePasswords(string);
 };
 
 /* CONSTRUCTORS */
@@ -171,5 +172,7 @@ void BankUser::showAccounts() {
     accounts.display();
 }
 
-
+void BankUser::changePasswords(string x) {
+    accounts.changePasswords(x);
+}
 #endif

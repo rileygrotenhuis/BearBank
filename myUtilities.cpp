@@ -369,9 +369,10 @@ void bankUserFunctionality(BankUser *user) {
             // If the newPassword is exit, continue
             if (newPassword == "exit") {
                 continue;
-            // Otherwise, set the User's password to the newPassword
+            // Otherwise, set the User's password to the newPassword and changes each Account's password
             } else {
                 user->setPassword(newPassword);
+                user->changePasswords(newPassword);
                 cout << user->getPassword() << endl;
             }
         } else if (menuChoice == "3") {

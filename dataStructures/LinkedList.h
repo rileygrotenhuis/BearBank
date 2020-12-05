@@ -26,6 +26,7 @@ class LinkedList {
         bool search(string);
         Account* get(string);
         void display();
+        void changePasswords(string);
 };
 
 /* CONSTRUCTOR */
@@ -210,6 +211,18 @@ void LinkedList::display() {
             cout << nodePtr->data.getAID() << endl;
             nodePtr = nodePtr->next;
         }
+    }
+}
+
+/* CHANGE PASSWORDS OPERATION */
+void LinkedList::changePasswords(string newPassword) {
+    Node *nodePtr;     // To traverse the List
+    nodePtr = root;    // Position nodePtr at the root of the List
+
+    // Traverse through the List using the nodePtr
+    while (nodePtr != nullptr) {
+        nodePtr->data.setPassword(newPassword);
+        nodePtr = nodePtr->next;
     }
 }
 #endif

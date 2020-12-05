@@ -28,7 +28,6 @@ using namespace std;
 
 int main() {
     /* controls the program */
-
     // display the welcome screen
     welcomeScreen();
     return 0;

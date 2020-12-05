@@ -199,6 +199,10 @@ class Account {
             accumInt = value;
         }
 
+        void setPassword(string x) {
+            password = x;
+        }
+
         void getAccInfo(){
             //test.append("Open Date: " + getOD() + "\n");
             //test.append("Close Date: " + getCD() + "\n");*/
