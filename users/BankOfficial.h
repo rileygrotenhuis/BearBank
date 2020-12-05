@@ -10,6 +10,7 @@ class BankOfficial {
         // Personal and Login Information
         string username;
         string password;
+        bool active = false;
     public:
         // Constructor
         BankOfficial();
@@ -17,9 +18,11 @@ class BankOfficial {
         // Setters
         void setUsername(string);
         void setPassword(string);
+        void setActive(bool);
         // Getters
         string getUsername();
         string getPassword();
+        bool getActive();
 };
 
 /* CONSTRUCTORS */
@@ -42,6 +45,10 @@ void BankOfficial::setPassword(string x) {
     password = x;
 }
 
+void BankOfficial::setActive(bool x) {
+    active = x;
+}
+
 /* GETTERS */
 string BankOfficial::getUsername() {
     return username;
@@ -49,5 +56,9 @@ string BankOfficial::getUsername() {
 
 string BankOfficial::getPassword() {
     return password;
+}
+
+bool BankOfficial::getActive() {
+    return active;
 }
 #endif

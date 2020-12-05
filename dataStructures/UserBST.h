@@ -31,6 +31,7 @@ private:
    void displayInOrder(TreeNode *) const;
    void displayPreOrder(TreeNode *) const;
    void displayPostOrder(TreeNode *) const;
+   void insert(TreeNode *&nodePtr, TreeNode *&newNode);
    BankUser* getUser(TreeNode *, string);
    BankUser* getUserWithAccnt(TreeNode *, string);
    BankUser* searchPhoneGetUser(TreeNode *&, string);
@@ -92,7 +93,7 @@ private:
       return(node);  
    }
 
-   TreeNode* insert(TreeNode* node, BankUser value) {
+   TreeNode* insertL(TreeNode* node, BankUser value) {
       /* Recursively inserts a value into the BST using node as the root, then 
       returns the new root of the subtree */
 
@@ -100,10 +101,10 @@ private:
          return(createNode(value));
    
       if (value.getUsername() < node->value.getUsername()) // if node needs to be inserted on the left
-         node->left = insert(node->left, value);
+         node->left = insertL(node->left, value);
 
       else if (value.getUsername() > node->value.getUsername()) // if node needs to be inserted on the right
-         node->right = insert(node->right, value);
+         node->right = insertL(node->right, value);
 
       else // can't be equal
          return node;
@@ -157,6 +158,8 @@ public:
    int height(TreeNode*);
    int isBalanced(TreeNode*);
    void getLeafs(TreeNode*);
+   void insertNode(string);
+   void insertNode2(BankUser);
    bool searchNode(string, bool, bool, bool, bool, bool);
    bool searchNode2(string);
    bool searchNode3(string);
@@ -219,7 +222,7 @@ public:
       }
    }
 
-   void insertNode(string value) {
+   void insertNodeL(string value) {
       vector <string> valueV;
       valueV = stringToVector(value);
       BankUser newUser;
@@ -241,11 +244,11 @@ public:
          newUser.setPassword(valueV[5]);
          newUser.setLastLogin(valueV[6]);
       }
-      root = insert(root, newUser);
+      root = insertL(root, newUser);
    }
 
-   void insertNode2(BankUser user) {
-      root = insert(root, user);
+   void insertNode2L(BankUser user) {
+      root = insertL(root, user);
    }
 };
 #endif
@@ -707,4 +710,44 @@ BankUser* BiTree::getUserWithAccnt(TreeNode *nodePtr, string input) {
       user = getUserWithAccnt(nodePtr->right, input);
    }
    return user;
+}
+
+void BiTree::insertNode(string username)
+{
+   TreeNode *newNode = new TreeNode; // Pointer to a new node.
+
+   vector <string> valueV;
+   valueV = stringToVector(username);
+   BankUser newUser;
+
+   newUser.setUsername(valueV[0]);
+   newUser.setPassword(valueV[1]);
+
+   // Store num in new node.
+   newNode->value = newUser;
+   newNode->left = newNode->right = nullptr;
+
+   // Insert the node.
+   insert(root, newNode);
+}
+
+void BiTree::insertNode2(BankUser user)
+{
+   TreeNode *newNode = new TreeNode; // Pointer to a new node.
+   // Store num in new node.
+   newNode->value = user;
+   newNode->left = newNode->right = nullptr;
+
+   // Insert the node.
+   insert(root, newNode);
+}
+
+void BiTree::insert(TreeNode *&nodePtr, TreeNode *&newNode)
+{
+   if (nodePtr == nullptr)
+      nodePtr = newNode; // Insert the node.
+   else if (newNode->value.getUsername() < nodePtr->value.getUsername())
+      insert(nodePtr->left, newNode); // Search the left branch
+   else
+      insert(nodePtr->right, newNode); // Search the right branch
 }

@@ -26,6 +26,7 @@ private:
    void displayPreOrder(TreeNode *) const;
    void displayPostOrder(TreeNode *) const;
    BankOfficial* getOfficial(TreeNode *, string);
+   void insert(TreeNode *&nodePtr, TreeNode *&newNode);
 
    TreeNode* findMinNode(TreeNode* node) {
       // finds the min value of the tree it's given
@@ -72,28 +73,33 @@ private:
       return true;
    }
 
+   int max(int a, int b)  {  
+      return (a > b)? a : b;  
+   } 
+
    TreeNode* createNode(BankOfficial key) {
       /* Utility function that simply creates a node */
       TreeNode* node = new TreeNode(); 
       node->value = key;  
       node->left = nullptr;  
-      node->right = nullptr;  
+      node->right = nullptr; 
 
       return(node);  
    }
 
-   TreeNode* insert(TreeNode* node, BankOfficial value) {
+   TreeNode* insertL(TreeNode* node, BankOfficial value) {
       /* Recursively inserts a value into the BST using node as the root, then 
       returns the new root of the subtree */
 
-      if (node == nullptr) // if it's the start to the BST
-         return(createNode(value));
+      if (node == nullptr){ // if it's the start to the BST
+         return createNode(value);
+      }
    
       if (value.getUsername() < node->value.getUsername()) // if node needs to be inserted on the left
-         node->left = insert(node->left, value);
+         node->left = insertL(node->left, value);
 
       else if (value.getUsername() > node->value.getUsername()) // if node needs to be inserted on the right
-         node->right = insert(node->right, value);
+         node->right = insertL(node->right, value);
 
       else // can't be equal
          return node;
@@ -101,14 +107,20 @@ private:
       /****  BALANCING FUNCTIONALITY  ****/
 
       int balance = isBalanced(node);
+      balance = 1;
 
       // If rotating right
-      if (balance > 1 && value.getUsername() < node->left->value.getUsername())
+      if (balance > 1 && value.getUsername() < node->left->value.getUsername()) {
          return rightRotation(node);
-   
+      }
+         
+
       // if rotating left
-      if (balance < -1 && value.getUsername() > node->right->value.getUsername())
+      if (balance < -1 && value.getUsername() > node->right->value.getUsername()) {
          return leftRotation(node);
+      }
+         
+         
 
       // if you need a left then right rotation
       if (balance > 1 && value.getUsername() > node->left->value.getUsername()) {
@@ -125,7 +137,6 @@ private:
       return node;
    }
     
-
 public:
     int leafCount;
 
@@ -150,6 +161,8 @@ public:
    bool searchNode(string);
    bool searchNodePassword(string);
    BankOfficial* getOfficialNode(string);
+   void insertNode(string);
+   void insertNode2(BankOfficial);
    
    // Get Balance factor of node N  
    int getBalance(TreeNode *N)  
@@ -200,7 +213,7 @@ public:
       }
    }
 
-   void insertNode(string value) {
+   void insertNodeL(string value) {
       vector <string> valueV;
       valueV = stringToVector(value);
       BankOfficial newOfficial;
@@ -208,7 +221,11 @@ public:
       newOfficial.setUsername(valueV[0]);
       newOfficial.setPassword(valueV[1]);
 
-      root = insert(root, newOfficial);
+      root = insertL(root, newOfficial);
+   }
+
+   void insertNode2L(BankOfficial official) {
+      root = insertL(root, official);
    }
 };
 #endif
@@ -263,9 +280,7 @@ bool OfficialTree::searchNode(string input){
    if (search(root, input)) {
       return true; //If search find the input
    }
-   else {
-      return false; //No input found
-   }
+   return false; //No input found
 }
 
 bool OfficialTree::searchNodePassword(string input){
@@ -434,7 +449,7 @@ BankOfficial* OfficialTree::getOfficial(TreeNode *nodePtr, string input) {
    if (nodePtr->value.getUsername() == input)
       return &nodePtr->value;
 
-   else if (input <= nodePtr->left->value.getUsername()) {
+   else if (input < nodePtr->value.getUsername()) {
       official = getOfficial(nodePtr->left, input);
    }
 
@@ -442,4 +457,44 @@ BankOfficial* OfficialTree::getOfficial(TreeNode *nodePtr, string input) {
       official = getOfficial(nodePtr->right, input);
    }
    return official;
+}
+
+void OfficialTree::insertNode(string username)
+{
+   TreeNode *newNode = new TreeNode; // Pointer to a new node.
+
+   vector <string> valueV;
+   valueV = stringToVector(username);
+   BankOfficial newOfficial;
+
+   newOfficial.setUsername(valueV[0]);
+   newOfficial.setPassword(valueV[1]);
+
+   // Store num in new node.
+   newNode->value = newOfficial;
+   newNode->left = newNode->right = nullptr;
+
+   // Insert the node.
+   insert(root, newNode);
+}
+
+void OfficialTree::insertNode2(BankOfficial official)
+{
+   TreeNode *newNode = new TreeNode; // Pointer to a new node.
+   // Store num in new node.
+   newNode->value = official;
+   newNode->left = newNode->right = nullptr;
+
+   // Insert the node.
+   insert(root, newNode);
+}
+
+void OfficialTree::insert(TreeNode *&nodePtr, TreeNode *&newNode)
+{
+   if (nodePtr == nullptr)
+      nodePtr = newNode; // Insert the node.
+   else if (newNode->value.getUsername() < nodePtr->value.getUsername())
+      insert(nodePtr->left, newNode); // Search the left branch
+   else
+      insert(nodePtr->right, newNode); // Search the right branch
 }

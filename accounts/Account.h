@@ -104,6 +104,7 @@ class Account {
             accountID = "CD" + accID;
             lastAccess = getTime();
             openDate = getTime();
+            closeDate = cDate;
         }
 
         //Constructor for Exiting CD Account
@@ -121,6 +122,10 @@ class Account {
             lastAccess = getTime();
             openDate = oDate;
             closeDate = cDate;
+            if (checkEx()) {
+                removeExInt();
+                closeFlag = true;
+            }
         }
 
         /*  ----------------------------------------------------------
