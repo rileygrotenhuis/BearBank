@@ -12,9 +12,9 @@ class Account {
         string accountID;
         string uniqueID;
         string password;
-        string openDate;
+        string openDate = "N/A";
         string lastAccess;
-        string closeDate;
+        string closeDate = "N/A";
         float balance;
         float interestRate;
         float pPercent = 0;
@@ -211,12 +211,43 @@ class Account {
         void getAccInfo(){
             //test.append("Open Date: " + getOD() + "\n");
             //test.append("Close Date: " + getCD() + "\n");*/
+            string strODate, strCDate, flag;
+            if (openDate == "N/A") {
+                strODate = "N/A";
+            }
+            else {
+                if (openDate.substr(1, 5).find(" ")) {
+                    strODate = openDate;
+                }
+                else {
+                    vector <string> oDate = parseDate(openDate);
+                    strODate = oDate[0] + " " + oDate[1];
+                }
+            }
+
+            if (closeDate == "N/A") {
+                strCDate = "N/A";
+            }
+            else {
+                vector <string> cDate = parseDate(closeDate);
+                strCDate = cDate[0] + " " + cDate[1];
+            }
+
+            if (getCFlag()) {
+                flag = "Closed";
+            }
+            else {
+                flag = "Active";
+            }
 
             cout << "- - - - - - - - - - - - - - - - - - - -\n"
             << "Account Info - \n"
             << "Account ID: " << accountID << "\n"
             << "Interest Rate: " << interestRate << "\n"
             << "Balance: $" << getBalance() << "\n"
+            << "Open Date: " << strODate << "\n"
+            << "Close Date: " << strCDate << "\n"
+            << "Status: " << flag << "\n"
             << "- - - - - - - - - - - - - - - - - - - -\n" << endl;
         }
 
