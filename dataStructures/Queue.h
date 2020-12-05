@@ -39,7 +39,7 @@ Queue<T>::Queue() {
 /* IS EMPTY OPERATION */
 template <class T>
 bool Queue<T>::isEmpty() {
-    if (numItems > 0) {
+    if (numItems >= 0) {
         return false;
     } else {
         return true;
@@ -98,13 +98,9 @@ vector<T> Queue<T>::getAll() {
         cout << "There is no transaction history" << endl;
     // Otherwise, get all of the Queue
     } else {
-        // Create a new Node and set it to the front
         Node *newNode = front;
-        // Loop through the current Transaction History
-        for (int i = 0; i < numItems; i++) {
-            // Push the current Node's data to the results vector
+        while(newNode != nullptr){
             results.push_back(newNode->data);
-            // Move the nodePtr to the next in the Queue
             newNode = newNode->next;
         }
     }
@@ -129,6 +125,6 @@ T Queue<T>::top() {
 /* SIZE OPERATION */
 template <class T>
 int Queue<T>::size() {
-    return numItems + 1;
+    return numItems;
 }
 #endif

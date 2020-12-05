@@ -41,7 +41,7 @@ private:
 
    /**** Right and left rotation to shift the BST ****/
 
-   TreeNode* rightRotation(TreeNode *oldRoot) {
+   TreeNode* rightRotation(TreeNode *&oldRoot) {
       /* Rotates a tree to the right based on the given node (oldRoot). Returns the newRoot */
       TreeNode *newRoot = oldRoot->left;
       TreeNode *newRootNewChild = newRoot->right;
@@ -54,7 +54,7 @@ private:
       return newRoot;
    }
 
-   TreeNode* leftRotation(TreeNode *oldRoot) {
+   TreeNode* leftRotation(TreeNode *&oldRoot) {
       /* Rotates a tree to the left based on the given node (oldRoot) Returns the newRoot */
       TreeNode *newRoot = oldRoot->right;
       TreeNode *newRootNewChild = newRoot->left;
@@ -107,7 +107,7 @@ private:
       /****  BALANCING FUNCTIONALITY  ****/
 
       int balance = isBalanced(node);
-      balance = 1;
+      //balance = 1;
 
       // If rotating right
       if (balance > 1 && value.getUsername() < node->left->value.getUsername()) {

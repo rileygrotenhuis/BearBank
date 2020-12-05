@@ -3,8 +3,8 @@
 // BiTree users;
 OfficialTree officials;
 // global admin
-const string ADMIN_USER_NAME = "a";
-const string ADMIN_PASSWORD = "a";
+const string ADMIN_USER_NAME = "admin";
+const string ADMIN_PASSWORD = "GOBEARS";
 // secret shut down code
 const string SHUT_IT_DOWN = "SHUTITDOWN";
 
@@ -47,7 +47,7 @@ vector <char> lineToVector(string line) {
 
 int threeCaseMenu(string menuItem1, string menuItem2, string menuItem3, string pick1, string pick2, string pick3) {
     /* Takes the arguments passed into the function and displays them to the user in a menu.
-    First 4 arguments are the menuItems, and the next 4 is what is displayed if the 
+    First 4 arguments are the menuItems, and the next 4 is what is displayed if the
     corresponding menu item is chose.
     Takes user input, tests it, and returns the input as an int to execute the chosen choice.
     Only works if the menu is 3 choices long, since it is the most common type of menu. More
@@ -113,7 +113,7 @@ int threeCaseMenu(string menuItem1, string menuItem2, string menuItem3, string p
 int fourCaseMenu(string menuItem1, string menuItem2, string menuItem3, string menuItem4,
     string pick1, string pick2, string pick3, string pick4) {
     /* Takes the arguments passed into the function and displays them to the user in a menu.
-    First 4 arguments are the menuItems, and the next 4 is what is displayed if the 
+    First 4 arguments are the menuItems, and the next 4 is what is displayed if the
     corresponding menu item is chose.
     Takes user input, tests it, and returns the input as an int to execute the chosen choice.
     Only works if the menu is 4 choices long, since it is the most common type of menu. More
@@ -191,19 +191,19 @@ bool stringTest(string line, bool letterCheck, bool numberCheck) {
     both as true to test both (correctCharsInAddress). */
     vector <char> lineV = lineToVector(line);
 
-    char correctCharsInNames[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    char correctCharsInNames[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
     'z' };
 
     char correctCharsInPhone[] = { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '(', ')' };
 
-    char correctCharsInAddress[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+    char correctCharsInAddress[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
     'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
     'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' };
 
-    int lettersSize = sizeof(correctCharsInNames) / sizeof(correctCharsInNames[0]); 
+    int lettersSize = sizeof(correctCharsInNames) / sizeof(correctCharsInNames[0]);
     int numsSize = sizeof(correctCharsInPhone) / sizeof(correctCharsInPhone[0]);
     int addressSize = sizeof(correctCharsInAddress) / sizeof(correctCharsInAddress[0]);
 
@@ -292,7 +292,7 @@ void userCheckingAccount() {
 
 /***********************************************************
 
-Login functions for types of logins (Users/Officials/Admins) 
+Login functions for types of logins (Users/Officials/Admins)
 
 ************************************************************/
 
@@ -317,12 +317,21 @@ void bankUserLogin(BiTree *users) {
 
         // Checks whether or not the username and password exist in the UserBST
         bool status1 = users->searchNode2(username);
-        bool status2 = users->searchNode3(password);
         // If the username and password exist, get that username and password's BankUser and run the next function
-        if (status1 == 1 && status2 == 1) {
-            BankUser *temp = users->getUserNode(username);
-            bankUserFunctionality(temp);
-            break;
+        if (status1) {
+            bool status2 = false;
+            BankUser* temp = users->getUserNode(username);
+            if (temp->getPassword() == password){
+                status2 = true;
+            }
+            if (status2){
+                BankUser *temp = users->getUserNode(username);
+                bankUserFunctionality(temp);
+                break;
+            }
+            else{
+               cout << "Username and/or password does not exist, try again!" << endl;
+            }
         // Otherwise, have the User try again
         } else {
             cout << "Username and/or password does not exist, try again!" << endl;
@@ -457,7 +466,7 @@ void addNewUserLogin(BiTree *users) {
                 cout << "Enter last name: ";
                 cin >> lastName;
                 cin.ignore(100, '\n');
-                
+
                 if (checkIfExit(lastName))
                     return;
 
@@ -480,7 +489,7 @@ void addNewUserLogin(BiTree *users) {
             cout << "Enter phone number in form of (555)555-5555: ";
             cin >> phoneNumber;
             cin.ignore(100, '\n');
-            
+
             if (checkIfExit(phoneNumber))
                 return;
 
@@ -500,7 +509,7 @@ void addNewUserLogin(BiTree *users) {
                 cout << "Please input your phone number in the correct form.\n";
             else if (phoneNumber[0] != '(' || phoneNumber[4] != ')' || phoneNumber[8] != '-')
                 cout << "Please input your phone number in the correct form.\n";
-            
+
             else {
                 break;
             }
@@ -559,7 +568,7 @@ void addNewUserLogin(BiTree *users) {
             cin >> yesOrNo;
             cin.ignore(100, '\n');
             while (true) {
-                if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n") 
+                if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n")
                     break;
                 else
                     cout << "\nPlease enter only 'y' or 'n' for yes or no.\n\n";
@@ -567,7 +576,7 @@ void addNewUserLogin(BiTree *users) {
 
             if (yesOrNo == "Y" || yesOrNo == "y") {
                 BankUser newUser(firstName, lastName, phoneNumber, address, username, password);
-                users->insertNode2(newUser);
+                users->insertNode2L(newUser);
 
                 cout << "You have successfully created a login at Bear Bank!\n"
                 << "We are exited to work with you!\n\n";
@@ -583,7 +592,7 @@ void addNewUserLogin(BiTree *users) {
         if (test)
             break;
     }
-    
+
 }
 
 void closeUserLogin(BiTree *users) {
@@ -681,7 +690,7 @@ void createAccnt(BiTree *users, string username) {
 
     cout << "\nWhat kind of account will be made?\n";
 
-    /* 5 case menu (may be replaced with a functionif more than one 5 case menus is needed 
+    /* 5 case menu (may be replaced with a functionif more than one 5 case menus is needed
     in the future) */
     string userInput;
     int intUserInput;
@@ -729,7 +738,7 @@ void createAccnt(BiTree *users, string username) {
                             initialBalance = stof(initialBalanceS);
                             if (initialBalance > 0) {
                                 accountNum = to_string(newAccNum());
-                                Account tempA(temp->getUsername(), password, 
+                                Account tempA(temp->getUsername(), password,
                                     initialBalance, accountNum);
                                 temp->addAccount(tempA);
                                 cout << "\nAccount has been created!"
@@ -768,7 +777,7 @@ void createAccnt(BiTree *users, string username) {
                                     interest = stof(savingsInterest);
 
                                     if (interest < .5) {
-                                        Account tempA(temp->getUsername(), temp->getPassword(), 
+                                        Account tempA(temp->getUsername(), temp->getPassword(),
                                             initialBalance, interest, accountNum);
                                         temp->addAccount(tempA);
                                         cout << "\nAccount has been created!"
@@ -819,7 +828,7 @@ void createAccnt(BiTree *users, string username) {
                                 date = dateV[0] + dateV[1];
                                 cout << "Date: " << date << endl;
 
-                                Account tempA(temp->getUsername(), temp->getPassword(), 
+                                Account tempA(temp->getUsername(), temp->getPassword(),
                                     initialBalance, interestCD, penaltyPercentage, accountNum, date);
                                 temp->addAccount(tempA);
                                 cout << "\nAccount has been created!"
@@ -847,7 +856,7 @@ void createAccnt(BiTree *users, string username) {
                             initialBalance = stof(initialBalanceS);
                             if (initialBalance > 0) {
                                 accountNum = to_string(newAccNum());
-                                Account tempA(temp->getUsername(), temp->getPassword(), 
+                                Account tempA(temp->getUsername(), temp->getPassword(),
                                     initialBalance, customInterest, monthlyFee, serviceCharge, accountNum);
                                 temp->addAccount(tempA);
                                 cout << "\nAccount has been created!"
@@ -883,8 +892,14 @@ void closeAccnt(BiTree *users, string username) {
         cin.ignore(100, '\n');
         if (checkIfExit(accntNum))
             return;
-        
+
         BankUser * temp = users->getUserNode(username);
+
+        if (temp->getAccount(accntNum)->getCFlag()){
+            cout << "\nCannot close already closed account...\n" << endl;
+            continue;
+        }
+
         if (accntNum == temp->getAccount(accntNum)->getAID()) {
             break;
         }
@@ -902,7 +917,7 @@ void closeAccnt(BiTree *users, string username) {
 
         cin >> yesOrNo;
         cin.ignore(100, '\n');
-            if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n") 
+            if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n")
                 break;
             else
                 cout << "\nPlease enter only 'y' or 'n' for yes or no.\n\n";
@@ -931,6 +946,17 @@ void closeAccnt(BiTree *users, string username) {
                 cout << "\nWithdrawing as cash...\n\n";
                 break;
             }
+
+            else if (temp->getAccount(userChoice)->getCFlag()){
+                cout << "\nCannot Deposit into closed accounts.\n" << endl;
+                continue;
+            }
+
+            else if (userChoice.substr(0,2) == "CD"){
+                cout << "\nCannot Deposit into Certificate of Deposit accounts.\n" << endl;
+                continue;
+            }
+
 
             else if (temp->searchAccount(userChoice)) {
                 Account * tempAccount2 = temp->getAccount(userChoice);
@@ -979,12 +1005,12 @@ void accessingSpecificAccount(BiTree *users, string username) {
 
     int choice = 0;
     while (choice != 3) {
-        choice = threeCaseMenu("1) Deposit", "2) Withdraw", "3) Go Back", 
+        choice = threeCaseMenu("1) Deposit", "2) Withdraw", "3) Go Back",
         "Entering Deposit", "Entering Withdraw", "Exiting");
 
         string depositAmmnt, withdrawAmmnt;
         double deposit, withdraw;
-        
+
         if (choice == 1) {
             while (true) {
                 cout << "\nEnter the amount to be deposited or 'exit' to cancel: ";
@@ -1006,7 +1032,7 @@ void accessingSpecificAccount(BiTree *users, string username) {
                     }
                     cout << "Please enter only a number greater than 0\n\n";
                 }
-                else 
+                else
                     cout << "Please enter only a number greater than 0\n\n";
             }
         }
@@ -1032,7 +1058,7 @@ void accessingSpecificAccount(BiTree *users, string username) {
                     }
                     cout << "Please enter only a number greater than 0\n\n";
                 }
-                else 
+                else
                     cout << "\nPlease enter only a number\n\n";
             }
         }
@@ -1045,8 +1071,8 @@ void accessingUserAccounts(BiTree *users, string username) {
     while (choice != 4) {
         cout << "Accessing User Accounts\n\n"
         << "- - - - - - - - - - - - - - - - - - - -\n\n";
-        choice = fourCaseMenu("1) Access a Specific Account", "2) Create a Specific Account", 
-        "3) Close a Specific Account", "4) Exit", "Accessing a Specific Account", 
+        choice = fourCaseMenu("1) Access a Specific Account", "2) Create a Specific Account",
+        "3) Close a Specific Account", "4) Exit", "Accessing a Specific Account",
         "Creating a Specific Account", "Closing a Specific Account", "Exiting");
 
         if (choice == 1) {
@@ -1072,14 +1098,14 @@ void officialLogin(BiTree *users) {
     BankUser * temp;
     BankOfficial * tempOfficial;
     Account * tempAccount;
-    
+
     while (true) {
         // Recieve inputs for username and password and test them
         cout << "Please enter your login information, or type 'exit' to quit:\n"
         << "Username - ";
         cin >> userName;
         cin.ignore(100, '\n');
-        
+
         if (checkIfExit(userName))
             return;
 
@@ -1092,10 +1118,11 @@ void officialLogin(BiTree *users) {
 
         if (officials.searchNode(userName)) {
             tempOfficial = officials.getOfficialNode(userName);
-            if (tempOfficial->getPassword() == password) {
+            if (tempOfficial->getPassword() == password && tempOfficial->getActive() == true) {
                 cout << "\nSuccessful Login!\n\n";
                 break;
             }
+            cout << "\nOfficial Unavailable\n\n";
         }
 
         else {
@@ -1110,7 +1137,7 @@ void officialLogin(BiTree *users) {
         // Open/Close login
         if (choice == 1) {
             cout << "What would you like to do?\n";
-            choice = threeCaseMenu("1) Open (Create) User Login", "2) Close a User Login", "3) Exit", 
+            choice = threeCaseMenu("1) Open (Create) User Login", "2) Close a User Login", "3) Exit",
             "Opening (Creating) a User Login", "Closing a User Login", "Exiting");
 
             if (choice == 1) {
@@ -1129,7 +1156,7 @@ void officialLogin(BiTree *users) {
                 << "Username: ";
                 cin >> inputUsername;
                 cin.ignore(100, '\n');
-        
+
                 if (checkIfExit(inputUsername))
                     return;
 
@@ -1152,7 +1179,7 @@ void officialLogin(BiTree *users) {
                         break;
                     }
                     else {
-                       cout << "\nError! No User Login under specified information, please try again.\n\n"; 
+                       cout << "\nError! No User Login under specified information, please try again.\n\n";
                     }
                 }
 
@@ -1172,7 +1199,7 @@ void officialLogin(BiTree *users) {
                 cout << "Enter an account number, customer Last name, phone number, or 'exit' to go back: ";
                 cin >> input;
                 cin.ignore(100, '\n');
-        
+
                 if (checkIfExit(input))
                     return;
 
@@ -1249,6 +1276,11 @@ void adminLogin(BiTree *users) {
                             if (checkIfExit(oUsername))
                                 return;
 
+                            if (officials.searchNode(oUsername)){
+                                cout << "Sorry username already exists. Please enter a different username.\n";
+                                continue;
+                            }
+
                             cout << "Enter the new Officials password: ";
                             cin >> oPassword;
                             cin.ignore(100, '\n');
@@ -1258,10 +1290,11 @@ void adminLogin(BiTree *users) {
                             BankOfficial tempO;
                             tempO.setUsername(oUsername);
                             tempO.setPassword(oPassword);
-                            officials.insertNode2(tempO);
+                            officials.insertNode2L(tempO);
 
                             cout << "\nNew Official created. Welcome aboard " << oUsername << "!\n"
                             << "The Admin still must activate this account to be used.\n\n";
+
                         }
 
                         if (newChoice == 2) {
@@ -1287,7 +1320,7 @@ void adminLogin(BiTree *users) {
                                     cin.ignore(100, '\n');
                                     if (checkIfExit(giveUsername))
                                         return;
-                                    if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n") 
+                                    if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n")
                                         break;
                                     else {
                                         cout << "\nPlease enter only 'y' or 'n' for yes or no.\n\n";
@@ -1331,7 +1364,7 @@ void adminLogin(BiTree *users) {
                                     cin.ignore(100, '\n');
                                     if (checkIfExit(giveUsername))
                                         return;
-                                    if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n") 
+                                    if (yesOrNo == "Y" || yesOrNo == "y" || yesOrNo == "N" || yesOrNo == "n")
                                         break;
                                     else {
                                         cout << "\nPlease enter only 'y' or 'n' for yes or no.\n\n";
@@ -1494,7 +1527,7 @@ void adminLogin(BiTree *users) {
                             cin.ignore(100, '\n');
                             if (checkIfExit(newPword))
                                 return;
-                            
+
                             tempUser->setPassword(newPword);
                             tempUser->changePasswords(newPword);
                             break;
@@ -1519,9 +1552,9 @@ void adminLogin(BiTree *users) {
     }
 }
 
-/*********************************************************** 
+/***********************************************************
 
-Displays opening page to the user 
+Displays opening page to the user
 
 ************************************************************/
 
@@ -1529,40 +1562,31 @@ void welcomeScreen(){
     BiTree users;
     /* Contains the starting menu options, and calls switch statment's corresponding functions */
     int choice;
-    BankUser user1("Riley", "Grotenhuis", "8163928687", "1714 South Drumm Avenue", "rg1050", "123");
-    BankUser user2("Riley", "Grotenhuis", "8163928687", "1714 South Drumm Avenue", "bg1050", "z123");
+
     BankOfficial official1;
-    official1.setUsername("m");
-    official1.setPassword("m");
+    official1.setUsername("official");
+    official1.setPassword("password");
     official1.setActive(true);
 
-    BankOfficial official2;
-    official2.setUsername("z");
-    official2.setPassword("z");
-    official2.setActive(true);
+    officials.insertNode2L(official1);
 
-    BankOfficial official3;
-    official3.setUsername("a");
-    official3.setPassword("a");
-    official3.setActive(true);
+    BankUser user1("Riley", "Grotenhuis", "(816)392-8687", "1714 South Drumm Avenue", "rg1050", "123");
 
-    Account a1("123", "123", 100, "123");
-    Account a2("456", "123", 200, "456");
-    Account a3("789", "123", 300, "789");
+    Account a1("rg1050", "123", 100, "123");
+    Account a2("rg1050", "123", 100, 0.01, 0, "456", "3402020", "2742020", false);
+    Account a3("rg1050", "123", 5000, 0.001, 500, 0.0001, "789", "3502020", "3402020", "2742020", false);
+    Account a4("rg1050", "123", 5000, 0.001, 500, 2000, 5, "789", "2742020", "2742020", false);
 
     user1.addAccount(a1);
     user1.addAccount(a2);
     user1.addAccount(a3);
+    user1.addAccount(a4);
 
-    users.insertNode2(user1);
-    users.insertNode2(user2);
+    users.insertNode2L(user1);
 
-    officials.insertNode2(official1);
-    officials.insertNode2(official2);
-    officials.insertNode2(official3);
-    
+
     while (true) {
-        cout << "- - - - - - - - - - - - - - - - - - - -\n\n" 
+        cout << "- - - - - - - - - - - - - - - - - - - -\n\n"
         << "Welcome to the Bear Bank!\n\n"
         "- - - - - - - - - - - - - - - - - - - -\n\n"
         << "Please Enter a Number to Login:\n";

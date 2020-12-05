@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cstring>
+//#include "readWrite.cpp"
 #include "users/BankOfficial.h"
 #include "users/BankUser.h"
 #include "dataStructures/Stack.h"
@@ -24,11 +25,20 @@
 #include "utilities/time.h"
 #include "myUtilities.cpp"
 
+
 using namespace std;
 
 int main() {
+
+    //Creates the bank
+    //createBank();
+
     /* controls the program */
     // display the welcome screen
     welcomeScreen();
+
+    //Gets current bank info and puts them into respective files
+    //getBankInfo();
+
     return 0;
 }

@@ -119,7 +119,7 @@ void LinkedList::deleteNode(string delData) {
             delete nodePtr;
             return;
         }
-        
+
         // Skip all Nodes until you reach the Node with the delData
         while (nodePtr != nullptr && nodePtr->data.getAID() != delData) {
             previousNode = nodePtr;
@@ -141,7 +141,7 @@ void LinkedList::deleteNode(string delData) {
 /* SIZE OPERATION */
 int LinkedList::size() {
     int count = 0;    // Initialize the count to 0
- 
+
     Node *nodePtr;     // To traverse the List
     nodePtr = root;    // Position nodePtr at the root of the List
 
@@ -193,7 +193,6 @@ Account* LinkedList::get(string getData) {
 
     // Return an error statement if getData does not exist in the List
     cout << "Does not exist!" << endl;
-    exit(1);
 }
 
 /* DISPLAY OPERATION */

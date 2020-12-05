@@ -51,7 +51,7 @@ private:
 
    /**** Right and left rotation to shift the BST ****/
 
-   TreeNode* rightRotation(TreeNode *oldRoot) {
+   TreeNode* rightRotation(TreeNode *&oldRoot) {
       /* Rotates a tree to the right based on the given node (oldRoot). Returns the newRoot */
       TreeNode *newRoot = oldRoot->left;
       TreeNode *newRootNewChild = newRoot->right;
@@ -64,7 +64,7 @@ private:
       return newRoot;
    }
 
-   TreeNode* leftRotation(TreeNode *oldRoot) {
+   TreeNode* leftRotation(TreeNode *&oldRoot) {
       /* Rotates a tree to the left based on the given node (oldRoot) Returns the newRoot */
       TreeNode *newRoot = oldRoot->right;
       TreeNode *newRootNewChild = newRoot->left;
@@ -687,13 +687,13 @@ BankUser* BiTree::getUser(TreeNode *nodePtr, string input) {
    if (nodePtr->value.getUsername() == input)
       return &nodePtr->value;
 
-   else if (input <= nodePtr->left->value.getUsername()) {
+   else if (input < nodePtr->value.getUsername()) {
       user = getUser(nodePtr->left, input);
    }
 
    else {
       user = getUser(nodePtr->right, input);
-   }
+   } 
    return user;
 }
 

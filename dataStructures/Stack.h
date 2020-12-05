@@ -14,6 +14,7 @@ class Stack {
             Node *next;    // Pointer to the next Node in the Stack
         };
         Node *top;         // The current top Node in the Stack
+        int numItems;
     public:
         // Constructor
         Stack();
@@ -24,6 +25,7 @@ class Stack {
         void push(T);
         T pop();
         T peek();
+        vector<T> getAll();
         int size();
 };
 
@@ -51,6 +53,7 @@ void Stack<T>::push(T newData) {
 
     // The new top index in newNode
     top = newNode;
+    numItems++;
 }
 
 /* POP OPERATION */
@@ -69,6 +72,7 @@ T Stack<T>::pop() {
         newNode->next = nullptr;
         return newNode->data;
     }
+    numItems--;
 }
 
 /* PEEK OPERATION */
@@ -81,6 +85,29 @@ T Stack<T>::peek() {
         cout << "The Stack is empty!" << endl;
         exit(1);
     }
+}
+
+template <class T>
+vector<T> Stack<T>::getAll() {
+    vector<string> results;    // The vector that will be returned
+    // If the Queue is empty, output that to the user
+    if (isEmpty()) {
+        cout << "There is no transaction history" << endl;
+    // Otherwise, get all of the Queue
+    } else {
+        // Create a new Node and set it to the front
+        Node *newNode = top;
+        // Loop through the current Transaction History
+        for (int i = 0; i < numItems; i++) {
+            // Push the current Node's data to the results vector
+            results.push_back(newNode->data);
+            // Move the nodePtr to the next in the Queue
+            newNode = newNode->next;
+        }
+    }
+
+    // Return the results vector
+    return results;
 }
 
 /* SIZE OPERATION */
@@ -101,7 +128,7 @@ int Stack<T>::size() {
             count++;
             nodePtr = nodePtr->next;
         }
-        
+
         // Return the Stack size
         return count;
     }

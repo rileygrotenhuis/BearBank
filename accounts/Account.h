@@ -260,6 +260,11 @@ class Account {
                 << "Depositing: $" << depositAmnt << "\n"
                 << "Total Balance is now $" << balance << "\n"
                 << "- - - - - - - - - - - - - - - - - - - -\n\n";
+
+                string currentTime = timeAndDate();
+                string roundNearist = to_string(depositAmnt).substr(0,to_string(depositAmnt).find(".")+3);
+                string transactionData = "Deposit of: $" + roundNearist + "\nOn: " + currentTime;
+                addTransactionHistory(transactionData);
             }
 
             //If password is incorrect after 3 consecutive tries
@@ -275,48 +280,62 @@ class Account {
             int passAttempts = 2;
             string input;
 
-            //Enters deposit mode and asks for user password
-            cout << "- - - - - - - - - - - - - - - - - - - -\n"
-            << "ENTERING WITHDRAWL MODE\n"
-            << "*** Please enter user password ***\n"
-            << "(You have " << passAttempts+1 << " attempts remaining)\n\n"
-            << "Password: ";
+            if(getBalance() < 0){
+                cout << "- - - - - - - - - - - - - - - - - - - -\n"
+                << "Cannot withdraw if bank account is less than zero\n"
+                << "Canceling Transaction...\n"
+                << "- - - - - - - - - - - - - - - - - - - -\n";
+            }
 
-            cin >> input;
-
-            cout << "- - - - - - - - - - - - - - - - - - - -\n";
-
-            //Give the user 3 chances to input their password correctly
-            while(input != password && passAttempts != 0){
-                passAttempts--;
-                cout <<  "Invalid password try again!\n"
+            else{
+                //Enters deposit mode and asks for user password
+                cout << "- - - - - - - - - - - - - - - - - - - -\n"
+                << "ENTERING WITHDRAW MODE\n"
+                << "*** Please enter user password ***\n"
                 << "(You have " << passAttempts+1 << " attempts remaining)\n\n"
                 << "Password: ";
 
-                cin.ignore();
                 cin >> input;
 
                 cout << "- - - - - - - - - - - - - - - - - - - -\n";
-            }
 
-            //If the password is correct
-            if (input == password){
-                balance -= withdrawAmnt;
-                if (pFee > 0){
-                    cout << "Notice!!! $" << pFee << " Service fee to account due to withdraw.\n\n";
-                    balance -= pFee;
+                //Give the user 3 chances to input their password correctly
+                while(input != password && passAttempts != 0){
+                    passAttempts--;
+                    cout <<  "Invalid password try again!\n"
+                    << "(You have " << passAttempts+1 << " attempts remaining)\n\n"
+                    << "Password: ";
+
+                    cin.ignore();
+                    cin >> input;
+
+                    cout << "- - - - - - - - - - - - - - - - - - - -\n";
                 }
-                cout << "Password Success!\n"
-                << "Depositing: $" << withdrawAmnt << "\n"
-                << "Total Balance is now $" << balance << "\n"
-                << "- - - - - - - - - - - - - - - - - - - -\n\n";
-            }
 
-            //If password is incorrect after 3 consecutive tries
-            else if(passAttempts == 0){
-                cout << "ATTENTION! Password attempts has reached\n"
-                << "minimum value. Exiting Deposit Mode...\n"
-                << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                //If the password is correct
+                if (input == password){
+                    balance -= withdrawAmnt;
+                    if (pFee > 0){
+                        cout << "Notice!!! $" << pFee << " Service fee to account due to withdraw.\n\n";
+                        balance -= pFee;
+                    }
+                    cout << "Password Success!\n"
+                    << "Withdrawing: $" << withdrawAmnt << "\n"
+                    << "Total Balance is now $" << balance << "\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+
+                    string currentTime = timeAndDate();
+                    string roundNearist = to_string(withdrawAmnt).substr(0, to_string(withdrawAmnt).find(".")+3);
+                    string transactionData = "Withdraw of: $" + roundNearist + "\nOn: " + currentTime;
+                    addTransactionHistory(transactionData);
+                }
+
+                //If password is incorrect after 3 consecutive tries
+                else if(passAttempts == 0){
+                    cout << "ATTENTION! Password attempts has reached\n"
+                    << "minimum value. Exiting Withdraw Mode...\n"
+                    << "- - - - - - - - - - - - - - - - - - - -\n\n";
+                }
             }
         }
 
